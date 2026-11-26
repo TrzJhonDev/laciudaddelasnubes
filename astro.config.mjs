@@ -10,6 +10,8 @@ const SITE = process.env.SITE_URL ?? 'https://laciudaddelasnubes.pages.dev';
 export default defineConfig({
   site: SITE,
   trailingSlash: 'never',
+  // Genera texto.html (no texto/index.html) para que Cloudflare Pages sirva /texto sin redirigir a /texto/.
+  build: { format: 'file' },
   integrations: [mdx(), sitemap()],
   vite: {
     plugins: [tailwindcss()],
