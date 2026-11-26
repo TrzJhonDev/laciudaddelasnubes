@@ -12,6 +12,11 @@ playwright-report/
 .lighthouseci/
 coverage/
 
+# documentos privados de planificación (no se publican en GitHub)
+/chachapoyas-historia-interactiva.md
+/PLAN-EJECUCION.md
+/privado/
+
 # entorno
 .env
 .env.*
