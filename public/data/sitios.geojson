@@ -1,0 +1,335 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "id": "chachapoyas",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -77.87239,
+          -6.22936
+        ]
+      },
+      "properties": {
+        "id": "chachapoyas",
+        "name": "Chachapoyas (Plaza de Armas)",
+        "kind": "ciudad",
+        "chapters": [
+          0,
+          6,
+          7,
+          9
+        ],
+        "source": "osm:way/49860004",
+        "confidence": "alta",
+        "note": "El documento maestro daba ≈ -77.850,-6.217 (unos 2.5 km al este); se usa el centro de la plaza en OSM."
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "kuelap",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -77.9233,
+          -6.4179
+        ]
+      },
+      "properties": {
+        "id": "kuelap",
+        "name": "Kuélap",
+        "kind": "arqueologico",
+        "chapters": [
+          2,
+          3,
+          9
+        ],
+        "source": "wikidata:Q1361820; osm:way/157862627",
+        "confidence": "alta"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "karajia",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -78.0214,
+          -6.1619
+        ]
+      },
+      "properties": {
+        "id": "karajia",
+        "name": "Sarcófagos de Karajía",
+        "kind": "funerario",
+        "chapters": [
+          2,
+          4
+        ],
+        "source": "wikidata:Q1728918; osm:node/5620107890",
+        "confidence": "alta"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "revash",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -77.8562,
+          -6.5407
+        ]
+      },
+      "properties": {
+        "id": "revash",
+        "name": "Mausoleos de Revash",
+        "kind": "funerario",
+        "chapters": [
+          2,
+          4
+        ],
+        "source": "wikidata:Q2088559",
+        "confidence": "alta"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "laguna-condores",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -77.6931,
+          -6.8506
+        ]
+      },
+      "properties": {
+        "id": "laguna-condores",
+        "name": "Laguna de los Cóndores",
+        "kind": "funerario",
+        "chapters": [
+          2,
+          4
+        ],
+        "source": "wikidata:Q380007; osm:way/52621734",
+        "confidence": "alta",
+        "note": "OSM sitúa el lago en Huicungo (San Martín) y Wikidata en la provincia de Chachapoyas: está junto al límite regional. Revisar la redacción."
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "museo-leymebamba",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -77.7984,
+          -6.7247
+        ]
+      },
+      "properties": {
+        "id": "museo-leymebamba",
+        "name": "Museo de Leymebamba",
+        "kind": "museo",
+        "chapters": [
+          4
+        ],
+        "source": "osm:node/633523473",
+        "confidence": "alta"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "leymebamba",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -77.8044,
+          -6.708
+        ]
+      },
+      "properties": {
+        "id": "leymebamba",
+        "name": "Leymebamba",
+        "kind": "poblado",
+        "chapters": [
+          4
+        ],
+        "source": "osm:node/631418511; wikidata:Q1475798",
+        "confidence": "alta"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "la-jalca",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -77.8155,
+          -6.4845
+        ]
+      },
+      "properties": {
+        "id": "la-jalca",
+        "name": "La Jalca",
+        "kind": "poblado",
+        "chapters": [
+          6
+        ],
+        "source": "osm:node/1412120883; wikidata:Q3374297",
+        "confidence": "alta",
+        "note": "Primera fundación (1538) según la mayoría de fuentes."
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "levanto",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -77.8991,
+          -6.3082
+        ]
+      },
+      "properties": {
+        "id": "levanto",
+        "name": "Levanto",
+        "kind": "poblado",
+        "chapters": [
+          6
+        ],
+        "source": "osm:node/2505286325; wikidata:Q4271227",
+        "confidence": "alta"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "higos-urco",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -77.8541,
+          -6.2287
+        ]
+      },
+      "properties": {
+        "id": "higos-urco",
+        "name": "Pampa de Higos Urco",
+        "kind": "historico",
+        "chapters": [
+          8
+        ],
+        "source": "wikidata:Q16886776",
+        "confidence": "media",
+        "note": "Coordenada de Wikidata, en el borde este de la ciudad actual. Confirmar la ubicación de la plazuela conmemorativa."
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "gocta",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -77.887,
+          -6.0231
+        ]
+      },
+      "properties": {
+        "id": "gocta",
+        "name": "Catarata de Gocta",
+        "kind": "natural",
+        "chapters": [
+          9
+        ],
+        "source": "osm:node/635239363; wikidata:Q512389",
+        "confidence": "alta"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "nuevo-tingo",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -77.9101,
+          -6.3732
+        ]
+      },
+      "properties": {
+        "id": "nuevo-tingo",
+        "name": "Nuevo Tingo",
+        "kind": "poblado",
+        "chapters": [
+          3,
+          9
+        ],
+        "source": "osm:node/631418510",
+        "confidence": "alta"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "gran-pajaten",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -77.40194,
+          -7.65478
+        ]
+      },
+      "properties": {
+        "id": "gran-pajaten",
+        "name": "Gran Pajatén",
+        "kind": "arqueologico",
+        "chapters": [
+          2
+        ],
+        "source": "osm:node/1728425124",
+        "confidence": "media",
+        "note": "Wikidata (Q581566) da -77.17,-7.45, con baja precisión; se usa OSM. Queda al sur del bbox regional propuesto (-7.6)."
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "moyobamba",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -76.9747,
+          -6.0347
+        ]
+      },
+      "properties": {
+        "id": "moyobamba",
+        "name": "Moyobamba",
+        "kind": "ciudad",
+        "chapters": [
+          8
+        ],
+        "source": "osm:node/411804007; wikidata:Q285672",
+        "confidence": "alta",
+        "note": "Al este del bbox original (-77.0): confirma el ajuste H2."
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "cusco",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -71.9785,
+          -13.5171
+        ]
+      },
+      "properties": {
+        "id": "cusco",
+        "name": "Cusco",
+        "kind": "ciudad",
+        "chapters": [
+          5
+        ],
+        "source": "osm:node/59115290; wikidata:Q5582862",
+        "confidence": "alta"
+      }
+    }
+  ]
+}

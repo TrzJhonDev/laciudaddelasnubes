@@ -1,0 +1,93 @@
+---
+order: 4
+slug: acantilados
+title: 'Los que custodian los acantilados'
+kicker: 'Karajía · Revash · Laguna de los Cóndores'
+summary: 'Sarcófagos, mausoleos y una necrópolis junto a una laguna: para los Chachapoya, los muertos vigilaban desde las alturas.'
+warning: 'Este capítulo muestra restos humanos de importancia cultural. Las imágenes son planos generales, sin primeros planos de rostros.'
+camera: { center: [-77.9, -6.45], zoom: 8.6, pitch: 40, bearing: 0, mobile: { zoom: 7.8, pitch: 35 } }
+steps:
+  - id: acantilados-01
+    camera: { center: [-77.9, -6.45], zoom: 8.6, pitch: 40, bearing: 0, mobile: { zoom: 7.8, pitch: 35 } }
+    layers: [sitios]
+  - id: acantilados-02
+    camera: { center: [-78.0214, -6.1619], zoom: 16, pitch: 75, bearing: -60, mobile: { zoom: 15.2, pitch: 60 } }
+  - id: acantilados-03
+    camera: { center: [-78.0214, -6.1619], zoom: 16.5, pitch: 78, bearing: -45, mobile: { zoom: 15.6, pitch: 60 } }
+  - id: acantilados-04
+    camera: { center: [-78.0214, -6.1619], zoom: 15.5, pitch: 70, bearing: -30, mobile: { zoom: 14.8, pitch: 58 } }
+  - id: acantilados-05
+    camera: { center: [-77.8562, -6.5407], zoom: 16, pitch: 75, bearing: 60, mobile: { zoom: 15.2, pitch: 60 } }
+  - id: acantilados-06
+    camera: { center: [-77.8562, -6.5407], zoom: 16.5, pitch: 78, bearing: 80, mobile: { zoom: 15.6, pitch: 60 } }
+  - id: acantilados-07
+    camera: { center: [-77.6931, -6.8506], zoom: 14.5, pitch: 65, bearing: 20, mobile: { zoom: 13.8, pitch: 55 } }
+  - id: acantilados-08
+    camera: { center: [-77.7984, -6.7247], zoom: 14, pitch: 55, bearing: 0, mobile: { zoom: 13.2, pitch: 45 } }
+sources:
+  - wikipedia-karajia
+  - bcrp-karajia
+  - wikipedia-revash
+  - wmf-revash
+  - wikipedia-laguna-momias
+  - atlasobscura-leymebamba
+  - andina-expoamazonica-2022
+liteImage: /lite/acantilados.avif
+draft: true
+---
+import Counter from '@/components/data/Counter.astro';
+import Step from '@/components/story/Step.astro';
+import SourceNote from '@/components/ui/SourceNote.astro';
+
+<Step id="acantilados-01">
+  Para los Chachapoya, la muerte no significaba desaparecer. Sus difuntos quedaban en lo alto, en
+  sarcófagos y mausoleos construidos en acantilados de difícil acceso, desde donde parecían vigilar
+  los valles. Tres lugares nos permiten conocer esta tradición: Karajía, Revash y la Laguna de los
+  Cóndores.
+</Step>
+
+<Step id="acantilados-02">
+  En Karajía, en el distrito de Trita, una fila de figuras alargadas se asoma desde una saliente del
+  acantilado, a más de 200 metros del fondo de la quebrada. Son purunmachus: sarcófagos
+  antropomorfos de arcilla, palos y paja que alcanzan hasta unos 2.5 metros de
+  alto.<SourceNote id="wikipedia-karajia" /><SourceNote id="bcrp-karajia" />
+</Step>
+
+<Step id="acantilados-03">
+  Sus rostros tienen mandíbulas prominentes y están pintados de blanco, con detalles en amarillo y
+  rojo. Sobre la cabeza de algunos se colocaron cráneos humanos. Dentro de cada sarcófago había un
+  fardo funerario: una persona en posición fetal, envuelta en textiles.<SourceNote id="wikipedia-karajia" />
+</Step>
+
+<Step id="acantilados-04">
+  La datación por radiocarbono los sitúa en el siglo XV, aunque la tradición de estos sarcófagos
+  sería más antigua.<SourceNote id="wikipedia-karajia" /><SourceNote id="bcrp-karajia" /> Fueron
+  documentados científicamente en la expedición Antisuyo de 1984–1985, con el arqueólogo Federico
+  Kauffmann Doig.<SourceNote id="wikipedia-karajia" />
+</Step>
+
+<Step id="acantilados-05">
+  Más al sur, en el distrito de Santo Tomás, la roca caliza del cerro Carbón guarda los mausoleos de
+  Revash. Parecen casitas de uno a tres pisos, hechas de piedra con mortero de barro, enlucidas y
+  pintadas en crema y rojo. Se construyeron en el siglo XIV.<SourceNote id="wikipedia-revash" /><SourceNote id="wmf-revash" />
+</Step>
+
+<Step id="acantilados-06">
+  A diferencia de Karajía, en Revash los entierros fueron colectivos: así lo indican los restos óseos
+  hallados en su interior.<SourceNote id="wikipedia-revash" /> El conjunto fue estudiado por Henry y
+  Paule Reichlen en el siglo XX y, en 2006, el World Monuments Fund lo incluyó en su lista de
+  patrimonio en riesgo.<SourceNote id="wmf-revash" />
+</Step>
+
+<Step id="acantilados-07">
+  En 1996, unos trabajadores encontraron seis mausoleos en una cueva sobre la Laguna de los
+  Cóndores, con pinturas en sus paredes. Antes de que llegaran los arqueólogos, los saqueadores
+  dañaron muchos de los fardos. En 1997, el Centro Mallqui hizo un rescate de emergencia.<SourceNote id="wikipedia-laguna-momias" />
+</Step>
+
+<Step id="acantilados-08">
+  Para proteger lo rescatado, en 1998 empezó a construirse el Museo de Leymebamba, que abrió en junio
+  del año 2000. Hoy conserva más de <Counter to={200} /> fardos funerarios y sus ofrendas, entre
+  ellas objetos de filiación inca, huella de la ocupación posterior de la
+  región.<SourceNote id="wikipedia-laguna-momias" /><SourceNote id="atlasobscura-leymebamba" />
+</Step>

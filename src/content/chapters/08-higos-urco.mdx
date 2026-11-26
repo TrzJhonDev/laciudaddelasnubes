@@ -1,0 +1,63 @@
+---
+order: 8
+slug: higos-urco
+title: 'Higos Urco: la libertad del norte'
+kicker: '6 de junio de 1821'
+summary: 'En la pampa de Higos Urco, los patriotas de Chachapoyas vencieron a las tropas realistas y consolidaron la independencia del norte del Perú.'
+camera: { center: [-77.8541, -6.2287], zoom: 14, pitch: 50, bearing: 0, mobile: { zoom: 13.2, pitch: 45 } }
+steps:
+  - id: higos-urco-01
+    camera: { center: [-77.4, -6.2], zoom: 8, pitch: 35, bearing: 0, mobile: { zoom: 7.2, pitch: 30 } }
+    layers: [sitios]
+  - id: higos-urco-02
+    camera: { center: [-77.8541, -6.2287], zoom: 14, pitch: 55, bearing: 70, mobile: { zoom: 13.2, pitch: 45 } }
+    layers: [higos-urco-tactico]
+  - id: higos-urco-03
+    camera: { center: [-77.8541, -6.2287], zoom: 15, pitch: 60, bearing: 90, mobile: { zoom: 14.2, pitch: 50 } }
+  - id: higos-urco-04
+    camera: { center: [-77.8541, -6.2287], zoom: 12, pitch: 45, bearing: 60, mobile: { zoom: 11.2, pitch: 40 } }
+  - id: higos-urco-05
+    camera: { center: [-77.87239, -6.22936], zoom: 15, pitch: 50, bearing: 30, mobile: { zoom: 14.2, pitch: 45 } }
+sources:
+  - andina-higos-urco-bicentenario
+  - andina-higos-urco-identidad
+  - elperuano-matiaza-rimachi
+  - congreso-higos-urco
+liteImage: /lite/higos-urco.avif
+draft: true
+---
+import Step from '@/components/story/Step.astro';
+import SourceNote from '@/components/ui/SourceNote.astro';
+
+{/* Nota de rigor (§3, Cap. 8): el número de combatientes varía según la fuente; no se dan cifras.
+    REVISAR: la Ley N.° 24982 (día cívico) no está aún en sources.json. */}
+
+<Step id="higos-urco-01">
+  En 1821, la campaña libertadora avanzaba por el norte del Perú. Chachapoyas se sumó a la causa
+  patriota, pero no estaba a salvo: desde Moyobamba, al este, se acercaban tropas realistas
+  dispuestas a mantener la región bajo el control de la Corona.<SourceNote id="andina-higos-urco-identidad" />
+</Step>
+
+<Step id="higos-urco-02">
+  El 6 de junio de 1821, los patriotas de Chachapoyas, con apoyo de Trujillo y Cajamarca, salieron a
+  su encuentro en la pampa de Higos Urco, muy cerca de la ciudad. Al final de la jornada, las tropas
+  realistas habían sido derrotadas.<SourceNote id="andina-higos-urco-identidad" /><SourceNote id="andina-higos-urco-bicentenario" />
+</Step>
+
+<Step id="higos-urco-03">
+  Entre quienes combatieron destacó Matiaza Rimachi, una mujer indígena que se convirtió en heroína
+  de la batalla. Su nombre recuerda que la independencia también la hicieron mujeres, y que los
+  pueblos originarios fueron protagonistas de ella.<SourceNote id="elperuano-matiaza-rimachi" />
+</Step>
+
+<Step id="higos-urco-04">
+  La victoria de Higos Urco consolidó la independencia del norte del Perú. Ocurrió el 6 de junio,
+  antes de que José de San Martín proclamara la independencia en Lima el 28 de julio de
+  1821.<SourceNote id="andina-higos-urco-identidad" /><SourceNote id="congreso-higos-urco" />
+</Step>
+
+<Step id="higos-urco-05">
+  Hoy, cada 6 de junio es día cívico y la pampa de Higos Urco es un sitio histórico con una plazuela
+  conmemorativa. En la Plaza Santa Ana, un monumento recuerda a los héroes de aquella jornada, hombres
+  y mujeres de Chachapoyas.<SourceNote id="andina-higos-urco-bicentenario" /><SourceNote id="congreso-higos-urco" />
+</Step>

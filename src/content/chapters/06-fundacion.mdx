@@ -1,0 +1,64 @@
+---
+order: 6
+slug: fundacion
+title: 'San Juan de la Frontera'
+kicker: '1535–1538'
+summary: 'La fundación española de Chachapoyas en 1538 y sus traslados: una ciudad que tuvo que mudarse para encontrar su lugar.'
+camera: { center: [-77.85, -6.36], zoom: 9.5, pitch: 45, bearing: 0, mobile: { zoom: 8.7, pitch: 40 } }
+steps:
+  - id: fundacion-01
+    camera: { center: [-77.85, -6.36], zoom: 9.5, pitch: 45, bearing: 0, mobile: { zoom: 8.7, pitch: 40 } }
+  - id: fundacion-02
+    camera: { center: [-77.85, -6.36], zoom: 9.8, pitch: 50, bearing: -15, mobile: { zoom: 9, pitch: 40 } }
+  - id: fundacion-03
+    camera: { center: [-77.8155, -6.4845], zoom: 14, pitch: 60, bearing: 0, mobile: { zoom: 13.2, pitch: 50 } }
+    layers: [ruta-fundacion]
+  - id: fundacion-04
+    route: ruta-fundacion
+    layers: [ruta-fundacion]
+  - id: fundacion-05
+    camera: { center: [-77.87239, -6.22936], zoom: 14, pitch: 55, bearing: 10, mobile: { zoom: 13.2, pitch: 45 } }
+    layers: [ruta-fundacion]
+sources:
+  - rah-alonso-alvarado
+  - elperuano-chachapoyas-484
+  - andina-chachapoyas-481
+  - wikipedia-chachapoyas
+  - reaa-canaris-chachapoyas
+  - pucp-conquista-inca
+liteImage: /lite/fundacion.avif
+draft: true
+---
+import Step from '@/components/story/Step.astro';
+import SourceNote from '@/components/ui/SourceNote.astro';
+
+<Step id="fundacion-01">
+  En 1535, Alonso de Alvarado, capitán de Francisco Pizarro, llegó por primera vez a la tierra de los
+  Chachapoyas. Venía con un grupo reducido de soldados a una región montañosa y desconocida para
+  los españoles, que hasta pocas décadas antes había resistido a los incas.<SourceNote id="rah-alonso-alvarado" />
+</Step>
+
+<Step id="fundacion-02">
+  No encontró solo enemigos. Por su antigua enemistad con los incas, varios grupos chachapoyas
+  decidieron colaborar con los españoles durante la conquista. Fue una alianza nacida de la
+  historia reciente de la región, más que de la confianza.<SourceNote id="reaa-canaris-chachapoyas" /><SourceNote id="pucp-conquista-inca" />
+</Step>
+
+<Step id="fundacion-03">
+  El 5 de septiembre de 1538, Alvarado fundó San Juan de la Frontera de los Chachapoyas. La
+  mayoría de las fuentes sitúan esa primera fundación en La Jalca, un pueblo situado a unos 30 kilómetros
+  en línea recta al sur de la ciudad actual.<SourceNote id="rah-alonso-alvarado" /><SourceNote id="elperuano-chachapoyas-484" />
+</Step>
+
+<Step id="fundacion-04">
+  La ciudad no se quedó allí. El clima, las enfermedades y la distancia a las tierras de cultivo
+  llevaron a trasladarla, primero a Levanto y después a su ubicación actual. Tres lugares distintos en
+  pocos años, unidos por los caminos de la sierra.<SourceNote id="andina-chachapoyas-481" /><SourceNote id="wikipedia-chachapoyas" />
+</Step>
+
+<Step id="fundacion-05">
+  ¿Sabías que las fechas de estos traslados todavía se discuten? Algunas fuentes hablan incluso de
+  una primera fundación en Levanto en 1536. La cronología exacta de los traslados se sigue
+  estudiando, pero el nombre histórico de la ciudad se mantiene: San Juan de la Frontera de los
+  Chachapoyas.<SourceNote id="wikipedia-chachapoyas" />
+</Step>

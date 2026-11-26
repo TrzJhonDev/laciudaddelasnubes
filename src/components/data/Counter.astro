@@ -1,0 +1,29 @@
+---
+/**
+ * Cifra animable. El valor final está en el HTML desde el inicio (§11):
+ * la animación (F3) solo cuenta visualmente hasta `to`.
+ */
+import { formatNumber } from '@/scripts/utils/format';
+
+interface Props {
+  to: number;
+  from?: number;
+  /** Texto antes o después de la cifra, p. ej. "~" o " m". */
+  prefix?: string;
+  suffix?: string;
+}
+
+const { to, from = 0, prefix = '', suffix = '' } = Astro.props;
+---
+
+<span class="counter tabular" data-counter data-from={from} data-to={to}
+  >{prefix}<span data-counter-value>{formatNumber(to)}</span>{suffix}</span
+>
+
+<style>
+  .counter {
+    color: var(--text-data);
+    font-weight: 600;
+    white-space: nowrap;
+  }
+</style>

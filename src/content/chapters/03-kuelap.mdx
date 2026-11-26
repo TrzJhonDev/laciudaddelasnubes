@@ -1,0 +1,93 @@
+---
+order: 3
+slug: kuelap
+title: 'Kuélap, la ciudad sobre la montaña'
+kicker: 'Más de mil años de piedra'
+summary: 'Una plataforma amurallada de casi 600 metros en la cima del cerro Barreta, con 420 estructuras circulares y una muralla de hasta 20 metros.'
+camera: { center: [-77.9233, -6.4179], zoom: 14, pitch: 60, bearing: 0, mobile: { zoom: 13.2, pitch: 50 } }
+steps:
+  - id: kuelap-01
+    camera: { center: [-77.9233, -6.4179], zoom: 15, pitch: 70, bearing: 0, mobile: { zoom: 14.2, pitch: 60 } }
+  - id: kuelap-02
+    orbit: { from: 0, to: 90 }
+    layers: [kuelap-muralla]
+  - id: kuelap-03
+    layers: [kuelap-muralla, kuelap-entradas]
+  - id: kuelap-04
+    orbit: { from: 90, to: 180 }
+    layers: [kuelap-recintos]
+  - id: kuelap-05
+    camera: { center: [-77.9233, -6.4179], zoom: 16, pitch: 72, bearing: -160, mobile: { zoom: 15.2, pitch: 60 } }
+    layers: [kuelap-tintero]
+  - id: kuelap-06
+    orbit: { from: 200, to: 270 }
+  - id: kuelap-07
+    camera: { center: [-77.9233, -6.4179], zoom: 13, pitch: 55, bearing: -90 }
+  - id: kuelap-08
+    camera: { center: [-77.9233, -6.4179], zoom: 12, pitch: 45, bearing: -60, mobile: { zoom: 11.2, pitch: 40 } }
+sources:
+  - andina-kuelap-monumental
+  - andina-kuelap-reapertura
+  - mincul-kuelap-muro-sur
+  - church-vonhagen
+liteImage: /lite/kuelap.avif
+draft: true
+---
+import Counter from '@/components/data/Counter.astro';
+import Step from '@/components/story/Step.astro';
+import SourceNote from '@/components/ui/SourceNote.astro';
+
+{/* BORRADOR F1.4 · pendiente de revisión por especialista (F1.6).
+    REVISAR: confirmar en qué publicación del Ministerio de Cultura aparecen
+    "136 hectáreas" y "alrededor del año 600 d.C."; hoy se citan con la nota
+    del muro sur como referencia provisional. */}
+
+<Step id="kuelap-01">
+  A unos 3,000 metros de altura, en la cima del cerro Barreta (distrito de Tingo, provincia de Luya),
+  los Chachapoya levantaron una plataforma de piedra de casi <Counter to={600} suffix=" metros" /> de
+  largo.<SourceNote id="andina-kuelap-monumental" /> Desde allí se domina el valle del Utcubamba.
+</Step>
+
+<Step id="kuelap-02">
+  Lo primero que impresiona es la muralla. En algunos tramos alcanza unos 19 a 20 metros de alto,
+  la altura de un edificio de seis pisos.<SourceNote id="andina-kuelap-monumental" /> Rodea toda
+  la plataforma y la convierte en una isla de piedra sobre las nubes.
+</Step>
+
+<Step id="kuelap-03">
+  Para entrar solo hay tres accesos: dos en el lado este y uno en el oeste.<SourceNote id="church-vonhagen" />
+  Son pasajes estrechos que obligan a entrar de pocos en pocos, un diseño que muchos investigadores
+  relacionan con la defensa del sitio.
+</Step>
+
+<Step id="kuelap-04">
+  Dentro de la muralla se han registrado <Counter to={420} /> estructuras, casi todas
+  circulares, repartidas en un sector bajo y otro alto.<SourceNote id="church-vonhagen" /> Muchas
+  conservan frisos de piedra en forma de rombos y zigzags, el sello de la arquitectura chachapoya.
+</Step>
+
+<Step id="kuelap-05">
+  Algunas construcciones destacan entre las demás. El Tintero, de más de cinco metros de alto,
+  guarda una cámara subterránea. Completan el conjunto el Templo Mayor y
+  El Castillo, en el sector alto.<SourceNote id="andina-kuelap-monumental" />
+</Step>
+
+<Step id="kuelap-06">
+  ¿Para qué se construyó Kuélap? Los investigadores no se ponen de acuerdo. La interpretación
+  clásica la ve como una fortaleza militar. Federico Kauffmann Doig propuso que fue un centro
+  administrativo y religioso. Otros creen que funcionó como un refugio fortificado para tiempos de
+  emergencia.<SourceNote id="andina-kuelap-monumental" />
+</Step>
+
+<Step id="kuelap-07">
+  Tampoco hay consenso sobre su edad. El Ministerio de Cultura sitúa el inicio de su construcción
+  alrededor del año 600 d.C.;<SourceNote id="mincul-kuelap-muro-sur" /> otras fuentes hablan de los
+  siglos XI a XVI.<SourceNote id="andina-kuelap-monumental" /> Lo que sí se sabe es que empezó hace
+  más de mil años y que estuvo ocupada durante siglos.
+</Step>
+
+<Step id="kuelap-08">
+  Los pobladores de la zona siempre la conocieron. Pero fue el 31 de enero de 1843 cuando el juez
+  Juan Crisóstomo Nieto la registró y la dio a conocer fuera de la región.<SourceNote id="andina-kuelap-reapertura" />
+  Desde entonces, Kuélap no ha dejado de despertar preguntas.
+</Step>

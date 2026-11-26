@@ -1,6 +1,28 @@
 ---
+import { getCollection } from 'astro:content';
+import { sourceTypes } from '@/content.config';
 import BaseLayout from '@/layouts/BaseLayout.astro';
-// F3: se generará automáticamente desde las colecciones "sources" y "media".
+
+// Generada desde las colecciones "sources" y "media" (§13.2).
+const sources = await getCollection('sources');
+const media = await getCollection('media');
+const typeLabel: Record<(typeof sourceTypes)[number], string> = {
+  oficial: 'Fuentes oficiales',
+  academica: 'Publicaciones académicas',
+  prensa: 'Prensa',
+  enciclopedia: 'Enciclopedias',
+  divulgacion: 'Divulgación',
+};
+const byType = sourceTypes
+  .map((t) => ({
+    t,
+    items: sources
+      .filter((s) => s.data.type === t)
+      .sort((a, b) => a.data.title.localeCompare(b.data.title, 'es')),
+  }))
+  .filter((g) => g.items.length > 0);
+const fmtDate = (iso: string) =>
+  new Intl.DateTimeFormat('es-PE', { dateStyle: 'long', timeZone: 'UTC' }).format(new Date(iso));
 ---
 
 <BaseLayout
@@ -9,11 +31,54 @@ import BaseLayout from '@/layouts/BaseLayout.astro';
 >
   <article class="mx-auto max-w-[65ch] px-4 py-16">
     <h1>Créditos y fuentes</h1>
-    <h2 class="mt-10">Cartografía</h2>
+
+    <h2 class="mt-12">Fuentes</h2>
+    {
+      byType.map(({ t, items }) => (
+        <section aria-labelledby={`tipo-${t}`} class="mt-8">
+          <h3 id={`tipo-${t}`}>{typeLabel[t]}</h3>
+          <ul class="mt-4 space-y-3">
+            {items.map(({ data: s }) => (
+              <li id={`fuente-${s.id}`} class="scroll-mt-8">
+                {s.author && <span>{s.author}. </span>}
+                {s.url ? (
+                  <a href={s.url} hreflang={s.lang} rel="noopener">
+                    «{s.title}»
+                  </a>
+                ) : (
+                  <span>«{s.title}»</span>
+                )}
+                . {s.publisher}
+                {s.published && <span>, {s.published}</span>}. Consultado el {fmtDate(s.accessed)}.
+              </li>
+            ))}
+          </ul>
+        </section>
+      ))
+    }
+
+    <h2 class="mt-12">Fotografías e ilustraciones</h2>
+    {
+      media.length === 0 ? (
+        <p class="mt-4">Aún no se han incorporado fotografías.</p>
+      ) : (
+        <ul class="mt-4 space-y-3">
+          {media.map(({ data: m }) => (
+            <li id={`media-${m.id}`}>
+              {m.caption}. {m.author}, {m.license}.
+            </li>
+          ))}
+        </ul>
+      )
+    }
+
+    <h2 class="mt-12">Cartografía</h2>
     <ul class="mt-4 list-disc space-y-2 ps-6">
       <li>Datos del mapa © colaboradores de OpenStreetMap, vía Protomaps.</li>
-      <li>Relieve: Mapterhorn (Copernicus GLO-30).</li>
+      <li>Relieve: <a href="https://mapterhorn.com/attribution">© Mapterhorn</a> (Copernicus GLO-30).</li>
+      <li>Coordenadas de sitios: OpenStreetMap y Wikidata.</li>
     </ul>
-    <p class="mt-10"><a href="/" class="inline-flex min-h-touch items-center">Volver a la experiencia</a></p>
+
+    <p class="mt-12"><a href="/" class="inline-flex min-h-touch items-center">Volver a la experiencia</a></p>
   </article>
 </BaseLayout>

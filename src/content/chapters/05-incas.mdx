@@ -1,0 +1,55 @@
+---
+order: 5
+slug: incas
+title: 'El Tahuantinsuyo llega al norte'
+kicker: 'Hacia 1470–1530'
+summary: 'Los Chachapoya resistieron, fueron conquistados por los incas y siguieron rebelándose durante décadas.'
+camera: { center: [-75.5, -10.0], zoom: 5, pitch: 20, bearing: 0, mobile: { zoom: 4.3, pitch: 15 } }
+steps:
+  - id: incas-01
+    camera: { center: [-75.5, -10.0], zoom: 5, pitch: 20, bearing: 0, mobile: { zoom: 4.3, pitch: 15 } }
+    layers: [expansion-inca, sitios]
+  - id: incas-02
+    camera: { center: [-77.85, -6.4], zoom: 7.5, pitch: 40, bearing: 0, mobile: { zoom: 6.8, pitch: 35 } }
+    layers: [sitios]
+  - id: incas-03
+    camera: { center: [-76.5, -8.5], zoom: 5.8, pitch: 25, bearing: 0, mobile: { zoom: 5, pitch: 20 } }
+    layers: [mitimaes]
+  - id: incas-04
+    camera: { center: [-77.85, -6.4], zoom: 8.5, pitch: 45, bearing: -10, mobile: { zoom: 7.8, pitch: 40 } }
+sources:
+  - pucp-conquista-inca
+  - reaa-canaris-chachapoyas
+  - wikipedia-cultura-chachapoya
+liteImage: /lite/incas.avif
+draft: true
+---
+import Step from '@/components/story/Step.astro';
+import SourceNote from '@/components/ui/SourceNote.astro';
+
+{/* REVISAR: las fuentes mencionan 1472 o hacia 1475 para la conquista; se usa "década de 1470". */}
+
+<Step id="incas-01">
+  En el siglo XV, el Tahuantinsuyo se expandía desde el Cusco en todas direcciones. Hacia la década
+  de 1470, los ejércitos de Túpac Inca Yupanqui llegaron al territorio chachapoya. La conquista fue
+  relativamente rápida, pero no puso fin a la resistencia.<SourceNote id="pucp-conquista-inca" /><SourceNote id="wikipedia-cultura-chachapoya" />
+</Step>
+
+<Step id="incas-02">
+  Los Chachapoya se rebelaron una y otra vez. Huayna Cápac, que gobernó desde 1493, tuvo que
+  organizar campañas para volver a someter la región. El control inca sobre estas montañas nunca fue
+  del todo tranquilo.<SourceNote id="pucp-conquista-inca" />
+</Step>
+
+<Step id="incas-03">
+  Para asegurar su dominio, los incas trasladaron por la fuerza a parte de la población chachapoya a
+  otras regiones del imperio. A estos grupos desplazados se los llamaba mitimaes. Así, muchas
+  familias chachapoyas terminaron viviendo lejos de las montañas donde habían nacido.<SourceNote id="pucp-conquista-inca" />
+</Step>
+
+<Step id="incas-04">
+  Conocemos esta resistencia gracias a cronistas como Pedro Cieza de León y el Inca Garcilaso de la
+  Vega, que la registraron en sus obras.<SourceNote id="pucp-conquista-inca" /> La enemistad con los
+  incas tendría consecuencias inesperadas pocas décadas después, cuando llegaron los
+  españoles.<SourceNote id="reaa-canaris-chachapoyas" />
+</Step>

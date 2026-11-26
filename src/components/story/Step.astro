@@ -1,0 +1,31 @@
+---
+/**
+ * Paso narrativo. La cámara y las capas se definen en el frontmatter del capítulo
+ * (mismo id); aquí solo va el texto. Sin JS se lee como un bloque normal.
+ */
+interface Props {
+  id: string;
+  align?: 'start' | 'center' | 'end';
+}
+
+const { id, align = 'start' } = Astro.props;
+---
+
+<section class="step" id={id} data-step={id} data-align={align}>
+  <div class="step__body">
+    <slot />
+  </div>
+</section>
+
+<style>
+  .step {
+    container-type: inline-size;
+    margin-block: 2rem;
+  }
+  .step__body {
+    max-inline-size: 60ch;
+  }
+  .step__body :global(p + p) {
+    margin-block-start: 1em;
+  }
+</style>

@@ -1,6 +1,10 @@
 ---
+import { getCollection, render } from 'astro:content';
 import BaseLayout from '@/layouts/BaseLayout.astro';
-// F3: este artículo se generará desde la colección "chapters" (mismo MDX que la experiencia).
+
+// Versión de solo texto (§6.3, H9): mismo MDX que la experiencia, sin mapa ni animaciones.
+const chapters = (await getCollection('chapters')).sort((a, b) => a.data.order - b.data.order);
+const rendered = await Promise.all(chapters.map(async (c) => ({ c, ...(await render(c)) })));
 ---
 
 <BaseLayout
@@ -10,8 +14,36 @@ import BaseLayout from '@/layouts/BaseLayout.astro';
   <article class="mx-auto max-w-[65ch] px-4 py-16">
     <h1>Chachapoyas: tierra de los hombres de la neblina</h1>
     <p class="mt-6">
-      Esta es la versión de solo texto de la experiencia. Se está preparando el contenido.
+      Versión de solo texto de la experiencia. <a href="/">Volver a la experiencia con mapa</a>.
     </p>
-    <p class="mt-6"><a href="/" class="inline-flex min-h-touch items-center">Volver a la experiencia</a></p>
+
+    <nav aria-labelledby="indice" class="mt-10">
+      <h2 id="indice" class="text-h3">Índice</h2>
+      <ol class="mt-4 list-decimal space-y-1 ps-6">
+        {chapters.map((c) => <li><a href={`#${c.data.slug}`}>{c.data.title}</a></li>)}
+      </ol>
+    </nav>
+
+    {
+      rendered.map(({ c, Content }) => (
+        <section id={c.data.slug} aria-labelledby={`${c.data.slug}-titulo`} class="mt-16">
+          <p class="font-mono text-sm tracking-wider text-[var(--text-data)] uppercase">
+            {c.data.kicker}
+          </p>
+          <h2 id={`${c.data.slug}-titulo`} class="mt-2">
+            {c.data.title}
+          </h2>
+          {c.data.draft && (
+            <p class="mt-4 rounded border border-piedra-600 px-3 py-2 text-sm text-piedra-700">
+              Borrador pendiente de revisión por un especialista.
+            </p>
+          )}
+          {c.data.warning && <p class="mt-4 italic">{c.data.warning}</p>}
+          <div class="mt-6">
+            <Content />
+          </div>
+        </section>
+      ))
+    }
   </article>
 </BaseLayout>

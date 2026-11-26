@@ -1,0 +1,57 @@
+---
+order: 2
+slug: chachapoya
+title: 'Los Chachapoya, guerreros de las nubes'
+kicker: 'Siglos IX–XV'
+summary: 'Una civilización propia, anterior a los incas y distinta de ellos, con ciudades circulares en las cumbres y frisos de piedra en rombo.'
+camera: { center: [-77.85, -6.4], zoom: 9, pitch: 45, bearing: 0, mobile: { zoom: 8.2, pitch: 40 } }
+steps:
+  - id: chachapoya-01
+    camera: { center: [-77.85, -6.4], zoom: 9, pitch: 45, bearing: 0, mobile: { zoom: 8.2, pitch: 40 } }
+  - id: chachapoya-02
+    camera: { center: [-77.85, -6.4], zoom: 9.3, pitch: 50, bearing: -15, mobile: { zoom: 8.5, pitch: 40 } }
+  - id: chachapoya-03
+    camera: { center: [-77.9233, -6.4179], zoom: 16, pitch: 70, bearing: 30, mobile: { zoom: 15.2, pitch: 60 } }
+    layers: [friso-rombos]
+  - id: chachapoya-04
+    camera: { center: [-77.65, -6.9], zoom: 7.6, pitch: 30, bearing: 0, mobile: { zoom: 6.8, pitch: 25 } }
+    layers: [sitios]
+sources:
+  - wikipedia-cultura-chachapoya
+  - church-vonhagen
+  - andina-chachapoyas-481
+liteImage: /lite/chachapoya.avif
+draft: true
+---
+import Step from '@/components/story/Step.astro';
+import SourceNote from '@/components/ui/SourceNote.astro';
+
+{/* REVISAR: las fuentes del documento maestro dan rangos distintos (Andina: 500–1570;
+    World Monuments Fund: siglo IX–década de 1470; divulgación: 800–1570). Falta registrar
+    la ficha general del WMF en sources.json para citarla aquí. */}
+
+<Step id="chachapoya-01">
+  Mucho antes de que llegaran los incas, estas montañas eran el hogar de los Chachapoya. Su cultura
+  floreció aproximadamente entre los siglos IX y XV de nuestra era, con antecedentes más antiguos
+  según algunos investigadores. Las fechas exactas varían de un autor a otro y todavía se
+  discuten.<SourceNote id="wikipedia-cultura-chachapoya" /><SourceNote id="church-vonhagen" />
+</Step>
+
+<Step id="chachapoya-02">
+  El origen del nombre "Chachapoyas" no está del todo claro. Hay varias interpretaciones, y una de
+  las más difundidas lo hace derivar de "Sachapuyos", que se traduce como "hombres de la
+  neblina".<SourceNote id="andina-chachapoyas-481" /> Hoy también se los recuerda con un apodo
+  popular: los guerreros de las nubes.
+</Step>
+
+<Step id="chachapoya-03">
+  Su arquitectura es inconfundible. Construían recintos circulares de piedra sobre cumbres y laderas
+  fáciles de defender, y los decoraban con frisos de rombos y zigzags. Ese rombo, repetido una y otra
+  vez en los muros, es el motivo que acompaña todo este recorrido.<SourceNote id="wikipedia-cultura-chachapoya" />
+</Step>
+
+<Step id="chachapoya-04">
+  Sus huellas se reparten por todo el territorio: la ciudad amurallada de Kuélap, los sarcófagos de
+  Karajía, los mausoleos de Revash, la necrópolis de la Laguna de los Cóndores y, más al sur, el Gran
+  Pajatén, hoy en la región San Martín. Veamos algunos de cerca.<SourceNote id="wikipedia-cultura-chachapoya" />
+</Step>

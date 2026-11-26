@@ -1,0 +1,31 @@
+---
+/**
+ * Nota de fuente inline: superíndice numerado que enlaza a /creditos.
+ * Falla el build si el id no existe en sources.json.
+ */
+import { getEntry } from 'astro:content';
+
+interface Props {
+  id: string;
+}
+
+const { id } = Astro.props;
+const source = await getEntry('sources', id);
+if (!source) {
+  throw new Error(`SourceNote: la fuente "${id}" no existe en src/content/sources/sources.json`);
+}
+const label = `Fuente: ${source.data.publisher}, «${source.data.title}»`;
+---
+
+<sup class="source-note"
+  ><a href={`/creditos#fuente-${id}`} title={label} aria-label={label}>[f]</a></sup
+>
+
+<style>
+  .source-note a {
+    display: inline-block;
+    padding-inline: 0.15em;
+    font-size: 0.75em;
+    text-decoration: none;
+  }
+</style>

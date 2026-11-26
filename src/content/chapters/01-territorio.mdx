@@ -1,0 +1,56 @@
+---
+order: 1
+slug: territorio
+title: 'El territorio de la neblina'
+kicker: 'Andes nororientales'
+summary: 'Montañas, ríos y bosques nubosos: una geografía extrema que moldeó el aislamiento, la defensa y la forma de honrar a los muertos.'
+camera: { center: [-77.9, -6.2], zoom: 8, pitch: 40, bearing: 0, mobile: { zoom: 7.3, pitch: 35 } }
+steps:
+  - id: territorio-01
+    camera: { center: [-77.9, -6.2], zoom: 8.5, pitch: 50, bearing: -20, mobile: { zoom: 7.8, pitch: 40 } }
+  - id: territorio-02
+    camera: { center: [-78.05, -6.0], zoom: 8.8, pitch: 55, bearing: -40, mobile: { zoom: 8, pitch: 45 } }
+    layers: [rios]
+  - id: territorio-03
+    camera: { center: [-77.9, -6.38], zoom: 11, pitch: 65, bearing: -70, mobile: { zoom: 10.2, pitch: 55 } }
+    layers: [rios, perfil-utcubamba]
+  - id: territorio-04
+    camera: { center: [-77.9, -6.38], zoom: 10.5, pitch: 65, bearing: -100, mobile: { zoom: 9.8, pitch: 55 } }
+sources:
+  - wikipedia-cultura-chachapoya
+  - wikipedia-chachapoyas
+  - andina-kuelap-monumental
+liteImage: /lite/territorio.avif
+draft: true
+---
+import Counter from '@/components/data/Counter.astro';
+import Step from '@/components/story/Step.astro';
+import SourceNote from '@/components/ui/SourceNote.astro';
+
+{/* REVISAR: la altitud de la ciudad (~2,335 m) viene de EcuRed en el documento maestro;
+    falta registrar esa fuente o confirmarla con Wikipedia. */}
+
+<Step id="territorio-01">
+  La historia de Chachapoyas empieza por su geografía. Estamos en los Andes nororientales del Perú,
+  entre los ríos Marañón y Huallaga, en la llamada ceja de selva: la franja donde la cordillera se
+  encuentra con la Amazonía y el bosque se cubre de neblina buena parte del año.<SourceNote id="wikipedia-cultura-chachapoya" />
+</Step>
+
+<Step id="territorio-02">
+  Dos ríos organizan este paisaje. El Marañón marca el límite occidental del territorio
+  chachapoya. El Utcubamba atraviesa el corazón de la región y, a lo largo de su valle, se
+  levantan varios de los sitios que recorreremos, como Kuélap y los mausoleos de Revash.<SourceNote id="wikipedia-cultura-chachapoya" />
+</Step>
+
+<Step id="territorio-03">
+  En pocos kilómetros, el terreno pasa de valles cálidos a cumbres que superan los 3,000 metros.
+  Chachapoyas está a unos <Counter to={2335} suffix=" metros" /> de altura;<SourceNote id="wikipedia-chachapoyas" />
+  Kuélap, a unos <Counter to={3000} suffix=" metros" />.<SourceNote id="andina-kuelap-monumental" />
+  Subir y bajar estas laderas siempre fue parte de la vida diaria.
+</Step>
+
+<Step id="territorio-04">
+  Esta geografía extrema lo moldeó todo. Aisló a sus pueblos, convirtió las cumbres en lugares
+  fáciles de defender y ofreció acantilados casi imposibles de alcanzar, donde los Chachapoya
+  decidieron dejar a sus muertos. Para entender su historia, hay que mirar primero las montañas.
+</Step>

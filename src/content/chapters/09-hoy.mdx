@@ -1,0 +1,91 @@
+---
+order: 9
+slug: hoy
+title: 'Chachapoyas hoy'
+kicker: 'Siglo XXI'
+summary: 'Gocta, las telecabinas de Kuélap, el colapso y la recuperación de su muralla: un pasado que se protege, se estudia y se visita.'
+camera: { center: [-77.887, -6.0231], zoom: 14, pitch: 65, bearing: 0, mobile: { zoom: 13.2, pitch: 55 } }
+steps:
+  - id: hoy-01
+    camera: { center: [-77.887, -6.0231], zoom: 14.5, pitch: 70, bearing: -30, mobile: { zoom: 13.7, pitch: 58 } }
+  - id: hoy-02
+    route: telecabinas
+    layers: [telecabinas]
+  - id: hoy-03
+    camera: { center: [-77.9233, -6.4179], zoom: 14, pitch: 60, bearing: 20, mobile: { zoom: 13.2, pitch: 50 } }
+  - id: hoy-04
+    camera: { center: [-77.9233, -6.4179], zoom: 16, pitch: 72, bearing: 180, mobile: { zoom: 15.2, pitch: 60 } }
+    layers: [kuelap-muro-sur]
+  - id: hoy-05
+    camera: { center: [-77.9233, -6.4179], zoom: 15.5, pitch: 70, bearing: -150, mobile: { zoom: 14.7, pitch: 58 } }
+    layers: [kuelap-muro-sur]
+  - id: hoy-06
+    camera: { center: [-77.87239, -6.22936], zoom: 13.5, pitch: 50, bearing: 0, mobile: { zoom: 12.7, pitch: 45 } }
+  - id: hoy-07
+    camera: { center: [-77.88, -6.3], zoom: 9, pitch: 40, bearing: 0, mobile: { zoom: 8.2, pitch: 35 } }
+    layers: [sitios]
+sources:
+  - wikipedia-gocta
+  - andina-telecabinas
+  - andina-telecabinas-2000
+  - elperuano-kuelap-cierre
+  - mincul-kuelap-muro-sur
+  - andina-kuelap-muro-2026
+  - elperuano-kuelap-natgeo-2027
+  - citypopulation-chachapoyas
+  - flightconnections-chh-lim
+liteImage: /lite/hoy.avif
+draft: true
+---
+import Counter from '@/components/data/Counter.astro';
+import Step from '@/components/story/Step.astro';
+import SourceNote from '@/components/ui/SourceNote.astro';
+
+{/* REVISAR: el desnivel "~1,000 m desde Nuevo Tingo" del documento maestro no cuadra con OSM
+    (andenes a 2,100 y 2,600 m); por eso aquí no se da la cifra. Las cifras de visitas 2016–2017
+    salen del documento maestro: confirmar qué artículo las publica. */}
+
+<Step id="hoy-01">
+  Los pobladores del valle siempre la conocieron, pero solo a comienzos de este siglo el mundo supo
+  de ella: la catarata de Gocta, en la provincia de Bongará, cae <Counter to={771} suffix=" metros" />
+  en dos saltos. Su medición y su difusión internacional llegaron en 2006, tras las expediciones de
+  Stefan Ziemendorff.<SourceNote id="wikipedia-gocta" />
+</Step>
+
+<Step id="hoy-02">
+  En marzo de 2017 empezaron a funcionar las telecabinas de Kuélap, las primeras del Perú. Parten de
+  Nuevo Tingo y, en un recorrido de unos 4 kilómetros y unos 20 minutos, acercan a los visitantes
+  hasta la antigua ciudad de piedra.<SourceNote id="andina-telecabinas" /><SourceNote id="andina-telecabinas-2000" />
+</Step>
+
+<Step id="hoy-03">
+  El efecto fue inmediato. Las visitas a Kuélap pasaron de unas <Counter to={56000} /> en 2016 a unas
+  <Counter to={108000} /> en 2017, casi el doble en un solo año.<SourceNote id="andina-telecabinas-2000" />
+  Kuélap se consolidó como el principal atractivo cultural de la región Amazonas.
+</Step>
+
+<Step id="hoy-04">
+  Pero la piedra también es frágil. En febrero de 2022, el Ministerio de Cultura declaró el complejo
+  en emergencia y, en abril de ese año, tras lluvias intensas, colapsó un tramo de la muralla
+  perimétrica sur. Kuélap tuvo que cerrar sus puertas.<SourceNote id="elperuano-kuelap-cierre" /><SourceNote id="mincul-kuelap-muro-sur" />
+</Step>
+
+<Step id="hoy-05">
+  El sitio reabrió en agosto de 2023 con un circuito restringido. En abril de 2026 terminó la
+  recuperación física de la muralla sur, y a fines de mayo ese sector volvió a la ruta turística. En
+  octubre, National Geographic incluyó a Kuélap entre sus destinos "Best of the World
+  2027".<SourceNote id="mincul-kuelap-muro-sur" /><SourceNote id="andina-kuelap-muro-2026" /><SourceNote id="elperuano-kuelap-natgeo-2027" />
+</Step>
+
+<Step id="hoy-06">
+  Mientras tanto, la ciudad crece. El distrito de Chachapoyas pasó de <Counter to={17447} /> habitantes
+  en 1993 a <Counter to={23939} /> en 2007 y <Counter to={35868} /> en 2017: más del doble en
+  veinticuatro años. Hoy tiene vuelos directos desde Lima, de alrededor de una hora y
+  media.<SourceNote id="citypopulation-chachapoyas" /><SourceNote id="flightconnections-chh-lim" />
+</Step>
+
+<Step id="hoy-07">
+  Más de mil años después de los Chachapoya, su territorio sigue esperando a quien quiera conocerlo.
+  Si lo visitas, hazlo con respeto: no toques las estructuras ni los restos, sigue los senderos
+  señalados y contrata guías locales. Así, estas piedras seguirán contando su historia.
+</Step>
