@@ -1,0 +1,182 @@
+/* Layout de la experiencia con mapa sticky (§9.2). Se importa desde index.astro. */
+
+.story {
+  position: relative;
+}
+
+.story__map {
+  position: sticky;
+  top: 0;
+  height: 100svh;
+  width: 100%;
+  z-index: 0;
+  overflow: hidden;
+  background:
+    radial-gradient(120% 80% at 50% 110%, #2f4a3a 0%, transparent 60%),
+    linear-gradient(180deg, #0e1412 0%, #1a2a21 100%);
+}
+
+/* MapLibre pone `position: relative` en su contenedor; aquí debe ocupar todo el panel fijo. */
+.story__map > #story-map {
+  position: absolute;
+  inset: 0;
+}
+
+/* Navegadores sin unidades svh (§9.3). */
+@supports not (height: 100svh) {
+  .story__map {
+    height: 100vh;
+  }
+  .story__content {
+    margin-top: -100vh;
+  }
+}
+
+/* El canvas aparece con un fundido cuando el mapa está listo. */
+.story__map :where(.maplibregl-canvas-container) {
+  opacity: 0;
+  transition: opacity 900ms var(--ease-out-power3);
+}
+:root[data-map-mode="live"] .story__map :where(.maplibregl-canvas-container) {
+  opacity: 1;
+}
+
+.story__map-status {
+  position: absolute;
+  inset-inline: 0;
+  bottom: max(1rem, env(safe-area-inset-bottom));
+  text-align: center;
+  font-size: 0.875rem;
+  color: var(--color-neblina-200);
+}
+:root[data-map-mode="live"] .story__map-status {
+  display: none;
+}
+
+.story__content {
+  position: relative;
+  z-index: 1;
+  margin-top: -100svh;
+  /* El mapa no recibe gestos en modo historia (§9.5); solo las tarjetas. */
+  pointer-events: none;
+}
+.story__content :where(a, button, .step__body, .chapter-intro__card, .story-hero__inner) {
+  pointer-events: auto;
+}
+
+/* Portada */
+.story-hero {
+  min-height: 100svh;
+  display: grid;
+  place-items: center;
+  padding: 1rem;
+  text-align: center;
+  color: var(--color-neblina-50);
+  background: linear-gradient(
+    180deg,
+    rgb(14 20 18 / 0.85) 0%,
+    rgb(14 20 18 / 0.35) 70%,
+    transparent
+  );
+}
+
+/* Portada de capítulo */
+.chapter-intro {
+  min-height: 80svh;
+  display: grid;
+  place-items: center;
+  padding: 1rem;
+}
+.chapter-intro__card {
+  max-inline-size: 40rem;
+  padding: 1.5rem 1.75rem;
+  border-radius: 0.5rem;
+  background: rgb(14 20 18 / 0.82);
+  color: var(--color-neblina-50);
+  text-align: center;
+  backdrop-filter: blur(6px);
+}
+
+/* Pasos como tarjetas sobre el mapa */
+.story .step {
+  min-height: 90svh;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  padding: 1rem;
+  padding-bottom: max(1rem, env(safe-area-inset-bottom));
+}
+.story .step__body {
+  inline-size: 100%;
+  max-inline-size: 520px;
+  padding: 1.25rem 1.5rem;
+  border-radius: 0.5rem;
+  background: rgb(244 245 242 / 0.94);
+  color: var(--color-bosque-900);
+  box-shadow: 0 10px 30px rgb(14 20 18 / 0.18);
+  opacity: 0.45;
+  transition: opacity 400ms var(--ease-out-power3);
+}
+.story .step.is-active .step__body {
+  opacity: 1;
+}
+@supports (backdrop-filter: blur(8px)) {
+  .story .step__body {
+    background: rgb(244 245 242 / 0.86);
+    backdrop-filter: blur(8px);
+  }
+}
+
+/* Escritorio: columna izquierda (~38%, máx. 520px) */
+@media (min-width: 1024px) {
+  .story .step {
+    padding-inline-start: 4vw;
+  }
+  .story .step__body {
+    inline-size: min(38vw, 520px);
+  }
+}
+
+/* Tablet vertical: tarjeta flotante al 60% del ancho, en el tercio inferior */
+@media (min-width: 768px) and (max-width: 1023px) {
+  .story .step {
+    justify-content: center;
+    align-items: flex-end;
+    padding-bottom: 12svh;
+  }
+  .story .step__body {
+    inline-size: 60%;
+  }
+}
+
+/* Móvil vertical: tarjeta inferior, máx. 40% del alto, fondo sólido */
+@media (max-width: 767px) {
+  .story .step {
+    align-items: flex-end;
+    padding-inline: 1rem;
+  }
+  .story .step__body {
+    max-block-size: 40svh;
+    overflow-y: auto;
+    background: var(--color-neblina-50);
+    backdrop-filter: none;
+  }
+}
+
+/* Teléfono en horizontal: mapa 55% / texto 45% */
+@media (orientation: landscape) and (max-height: 500px) {
+  .story .step {
+    justify-content: flex-end;
+    align-items: center;
+  }
+  .story .step__body {
+    inline-size: 45vw;
+    max-block-size: 85svh;
+    overflow-y: auto;
+  }
+}
+
+/* Modo lite: sin mapa vivo, el fondo queda fijo y el texto se lee igual */
+:root[data-map-mode="lite"] .story .step__body {
+  opacity: 1;
+}

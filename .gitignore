@@ -3,6 +3,9 @@ node_modules/
 dist/
 .astro/
 
+# copias generadas por scripts/copy-vendor.mjs
+public/vendor/
+
 # tiles pesados: se alojan en Cloudflare R2, no en git
 *.pmtiles
 

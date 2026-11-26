@@ -1,0 +1,22 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "id": "ruta-fundacion",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [-77.8155, -6.4845],
+          [-77.8991, -6.3082],
+          [-77.87239, -6.22936]
+        ]
+      },
+      "properties": {
+        "id": "ruta-fundacion",
+        "name": "La Jalca → Levanto → Chachapoyas",
+        "note": "Esquemática: une las tres ubicaciones en línea recta; no representa un camino histórico."
+      }
+    }
+  ]
+}

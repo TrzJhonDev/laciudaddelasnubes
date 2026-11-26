@@ -13,7 +13,8 @@
  *   neblina-50 / noche-950   17.0   ✔ modo oscuro / intro
  *   ocre-500   / noche-950    5.5   ✔ cifras destacadas sobre fondo oscuro
  */
-@theme {
+/* `static`: emite todas las variables aunque Tailwind no vea su uso (story.css, scripts). */
+@theme static {
   /* Paleta */
   --color-neblina-50: #f4f5f2;
   --color-neblina-200: #dde1da;

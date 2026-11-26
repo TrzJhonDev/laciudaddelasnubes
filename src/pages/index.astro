@@ -1,62 +1,78 @@
 ---
+import { getCollection, render } from 'astro:content';
+import Chapter from '@/components/story/Chapter.astro';
+import StickyMap from '@/components/story/StickyMap.astro';
 import FrisoRombos from '@/components/svg/FrisoRombos.astro';
 import BaseLayout from '@/layouts/BaseLayout.astro';
+import { buildStoryData } from '@/scripts/story/data';
+import '@/styles/story.css';
 
-// F0: portada provisional que muestra los tokens. El mapa y el scroll llegan en F2.
-const chapters = [
-  'El territorio de la neblina',
-  'Los Chachapoya, guerreros de las nubes',
-  'Kuélap, la ciudad sobre la montaña',
-  'Los que custodian los acantilados',
-  'El Tahuantinsuyo llega al norte',
-  'San Juan de la Frontera',
-  'La ciudad de los balcones',
-  'Higos Urco: la libertad del norte',
-  'Chachapoyas hoy',
-];
+const chapters = (await getCollection('chapters')).sort((a, b) => a.data.order - b.data.order);
+const rendered = await Promise.all(chapters.map(async (c) => ({ c, ...(await render(c)) })));
+const storyData = buildStoryData(
+  chapters.map((c) => ({ slug: c.data.slug, camera: c.data.camera, steps: c.data.steps })),
+);
 ---
 
 <BaseLayout
   title="Chachapoyas: tierra de los hombres de la neblina"
   description="Un recorrido interactivo por más de mil años de historia de Chachapoyas y su territorio: Kuélap, Karajía, Revash, la colonia y la independencia."
-  dark
 >
-  <section
-    class="grid min-h-svh place-items-center px-4 pb-[max(2rem,env(safe-area-inset-bottom))] text-center"
-    aria-labelledby="titulo"
-  >
-    <div class="mx-auto max-w-3xl">
-      <p class="font-mono text-sm tracking-[0.2em] text-[var(--text-data)] uppercase">
-        Amazonas · Perú
-      </p>
-      <h1 id="titulo" class="mt-4 font-light">
-        Chachapoyas
-        <span class="mt-2 block text-h3 font-normal italic">tierra de los hombres de la neblina</span>
-      </h1>
-      <FrisoRombos class="mx-auto mt-8" count={11} />
-      <p class="mx-auto mt-8 max-w-[60ch] text-[var(--text-accent)]">
-        Hay ciudades que se esconden entre las nubes. Pronto podrás recorrer aquí más de mil años
-        de su historia.
-      </p>
-      <p class="mt-6">
-        <a href="/texto" class="inline-flex min-h-touch items-center px-2">Leer la versión de texto</a>
-      </p>
-    </div>
-  </section>
+  <div class="story">
+    <StickyMap />
 
-  <section class="bg-neblina-50 px-4 py-16 text-bosque-900" aria-labelledby="capitulos">
-    <div class="mx-auto max-w-[60ch]">
-      <h2 id="capitulos">Capítulos</h2>
-      <ol class="mt-6 space-y-3">
-        {
-          chapters.map((c, i) => (
-            <li class="flex gap-4">
-              <span class="tabular font-mono text-ocre-700">{String(i + 1).padStart(2, '0')}</span>
-              <span>{c}</span>
-            </li>
-          ))
-        }
-      </ol>
+    <div class="story__content">
+      <header class="story-hero" aria-labelledby="titulo">
+        <div class="story-hero__inner mx-auto max-w-3xl">
+          <p class="font-mono text-sm tracking-[0.2em] text-ocre-500 uppercase">Amazonas · Perú</p>
+          <h1 id="titulo" class="mt-4 font-light">
+            Chachapoyas
+            <span class="mt-2 block text-h3 font-normal italic">tierra de los hombres de la neblina</span>
+          </h1>
+          <FrisoRombos class="mx-auto mt-8" count={11} />
+          <p class="mx-auto mt-8 max-w-[50ch] text-neblina-200">
+            Desliza para recorrer más de mil años de historia.
+          </p>
+          <p class="mt-4 text-sm">
+            <a href="/texto" class="inline-flex min-h-touch items-center px-2 text-neblina-50"
+              >Prefiero leer la versión de texto</a
+            >
+          </p>
+        </div>
+      </header>
+
+      {
+        rendered.map(({ c, Content }) => (
+          <Chapter
+            slug={c.data.slug}
+            order={c.data.order}
+            title={c.data.title}
+            kicker={c.data.kicker}
+            warning={c.data.warning}
+          >
+            <Content />
+          </Chapter>
+        ))
+      }
+
+      <footer class="chapter-intro">
+        <div class="chapter-intro__card">
+          <h2 class="text-h3">Fuentes y créditos</h2>
+          <p class="mt-4 text-sm text-neblina-200">
+            Cada dato de esta historia lleva su fuente. Los textos son un borrador pendiente de
+            revisión por un especialista.
+          </p>
+          <p class="mt-4 flex flex-wrap justify-center gap-x-6">
+            <a href="/creditos" class="inline-flex min-h-touch items-center text-neblina-50">Ver fuentes</a>
+            <a href="/texto" class="inline-flex min-h-touch items-center text-neblina-50">Versión de texto</a>
+          </p>
+        </div>
+      </footer>
     </div>
-  </section>
+  </div>
+
+  <script type="application/json" id="story-data" set:html={JSON.stringify(storyData)} />
+  <script>
+    import '@/scripts/story/main';
+  </script>
 </BaseLayout>

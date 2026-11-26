@@ -1,0 +1,30 @@
+---
+interface Props {
+  slug: string;
+  order: number;
+  title: string;
+  kicker: string;
+  warning?: string | undefined;
+}
+
+const { slug, order, title, kicker, warning } = Astro.props;
+const titleId = `${slug}-titulo`;
+---
+
+<section class="chapter" id={slug} aria-labelledby={titleId} data-chapter={slug}>
+  <header class="chapter-intro">
+    <div class="chapter-intro__card">
+      {
+        order > 0 && (
+          <p class="tabular font-mono text-sm tracking-[0.2em] text-ocre-500">
+            {String(order).padStart(2, '0')}
+          </p>
+        )
+      }
+      <p class="mt-1 font-mono text-xs tracking-[0.2em] text-neblina-200 uppercase">{kicker}</p>
+      <h2 id={titleId} class="mt-3">{title}</h2>
+      {warning && <p class="mt-4 text-sm text-neblina-200 italic">{warning}</p>}
+    </div>
+  </header>
+  <slot />
+</section>

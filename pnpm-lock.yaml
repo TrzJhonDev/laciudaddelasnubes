@@ -14,6 +14,9 @@ importers:
       '@astrojs/sitemap':
         specifier: 3.7.6
         version: 3.7.6
+      '@protomaps/basemaps':
+        specifier: 5.7.2
+        version: 5.7.2
       '@turf/along':
         specifier: 7.4.0
         version: 7.4.0
@@ -826,6 +829,10 @@ packages:
   '@playwright/test@1.65.1':
     resolution: {integrity: sha512-y+NCIRm2LvY4slUVWvGh1nujJ8RF/hEisIsq2mtUPgdQC4L701bq5hZGMhrpeXjACvwvO9tj5dJqhvM6TP9lbw==}
     engines: {node: '>=20'}
+    hasBin: true
+
+  '@protomaps/basemaps@5.7.2':
+    resolution: {integrity: sha512-K1Yk6bWdULulYg+R2QRVXx4NzJZan5YQhpejEG0c1/sXruJrfPIPZuakpf3jwAgVmjIRVQwAv+yRafDeN0aaUQ==}
     hasBin: true
 
   '@puppeteer/browsers@3.3.0':
@@ -4150,6 +4157,8 @@ snapshots:
   '@playwright/test@1.65.1':
     dependencies:
       playwright: 1.65.1
+
+  '@protomaps/basemaps@5.7.2': {}
 
   '@puppeteer/browsers@3.3.0(proxy-agent@8.0.3(supports-color@7.2.0))':
     dependencies:
