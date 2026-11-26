@@ -30,3 +30,6 @@ coverage/
 Thumbs.db
 .vscode/*
 !.vscode/extensions.json
+
+# herramientas locales (go-pmtiles)
+.tools/

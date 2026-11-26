@@ -140,7 +140,11 @@ async function start(data: StoryData, mapEl: HTMLElement) {
     },
   );
 
+  // Con la pestaña oculta el navegador ya deja de dibujar; no se detiene el mapa (eso cortaba
+  // los vuelos a medias). Al volver, la cámara se coloca en el paso actual sin animación.
   document.addEventListener('visibilitychange', () => {
-    if (document.hidden) controller?.pause();
+    if (document.hidden || !controller) return;
+    const step = stepById.get($narrative.get().step);
+    if (step && !step.orbit && !step.route) controller.goTo(cameraOf(step), { instant: true });
   });
 }

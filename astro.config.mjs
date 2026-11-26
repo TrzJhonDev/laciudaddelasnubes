@@ -15,17 +15,6 @@ export default defineConfig({
   integrations: [mdx(), sitemap()],
   vite: {
     plugins: [tailwindcss()],
-    server: {
-      // Solo en desarrollo: build.protomaps.com no envía CORS, así que el mapa base se pide
-      // a través del servidor de Vite. En producción se usará el recorte alojado en R2 (F2.1).
-      proxy: {
-        '/remote/protomaps': {
-          target: 'https://build.protomaps.com',
-          changeOrigin: true,
-          rewrite: (path) => path.replace(/^\/remote\/protomaps/, ''),
-        },
-      },
-    },
   },
   fonts: [
     {

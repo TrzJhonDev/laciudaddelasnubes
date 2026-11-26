@@ -1,6 +1,6 @@
 interface ImportMetaEnv {
-  /** URL del PMTiles del mapa base en producción (R2). */
-  readonly PUBLIC_BASEMAP_URL?: string;
+  /** URL base (sin barra final) donde están continente.pmtiles y amazonas.pmtiles (R2). */
+  readonly PUBLIC_TILES_BASE?: string;
 }
 
 interface ImportMeta {

@@ -2,8 +2,11 @@ import { LIGHT, layers as protomapsLayers } from '@protomaps/basemaps';
 import type { LayerSpecification, StyleSpecification } from 'maplibre-gl';
 import {
   ATTRIBUTION,
-  BASEMAP_URL,
+  BASEMAPS,
   GLYPHS_URL,
+  REGIONAL_MINZOOM,
+  SATELLITE_MAXZOOM,
+  SATELLITE_TILES,
   SPRITE_URL,
   TERRAIN_MAXZOOM,
   TERRAIN_TILES,
@@ -33,20 +36,57 @@ const flavor = {
   country_label: '#735c3e',
 };
 
+/**
+ * Capas del mapa base para los dos recortes: cada capa de Protomaps se duplica, la versión
+ * continental hasta REGIONAL_MINZOOM y la regional desde ahí. Se intercalan para conservar
+ * el orden de dibujo (agua, vías, etiquetas…).
+ */
+function basemapLayers(): LayerSpecification[] {
+  if (!BASEMAPS) {
+    return [
+      { id: 'background', type: 'background', paint: { 'background-color': flavor.background } },
+    ];
+  }
+  const cont = protomapsLayers('continente', flavor, { lang: 'es' }) as LayerSpecification[];
+  const reg = protomapsLayers('amazonas', flavor, { lang: 'es' }) as LayerSpecification[];
+  const out: LayerSpecification[] = [];
+  cont.forEach((c, i) => {
+    const r = reg[i];
+    if (c.type === 'background' || !r) {
+      out.push(c);
+      return;
+    }
+    out.push({ ...c, id: `cont-${c.id}`, maxzoom: Math.min(c.maxzoom ?? 24, REGIONAL_MINZOOM) });
+    out.push({ ...r, id: `reg-${r.id}`, minzoom: Math.max(r.minzoom ?? 0, REGIONAL_MINZOOM) });
+  });
+  return out;
+}
+
 export function buildStyle(opts: { exaggeration: number }): StyleSpecification {
-  const base: LayerSpecification[] = BASEMAP_URL
-    ? (protomapsLayers('base', flavor, { lang: 'es' }) as LayerSpecification[])
-    : [{ id: 'background', type: 'background', paint: { 'background-color': flavor.background } }];
+  const base = basemapLayers();
 
   // El hillshade va justo encima del suelo y del agua, debajo de vías y etiquetas.
-  const firstRoad = base.findIndex((l) => l.id.startsWith('roads') || l.type === 'symbol');
+  const firstRoad = base.findIndex((l) => /^(cont|reg)-roads/.test(l.id) || l.type === 'symbol');
   const insertAt = firstRoad === -1 ? base.length : firstRoad;
+  // Satélite en paisajes; se desvanece hacia el mapa vectorial en la ciudad (zoom ≥ 16.5).
+  const satellite: LayerSpecification = {
+    id: 'satelite',
+    type: 'raster',
+    source: 'satelite',
+    paint: {
+      'raster-opacity': ['interpolate', ['linear'], ['zoom'], 15.5, 1, 16.5, 0],
+      'raster-saturation': -0.15,
+      'raster-contrast': 0.05,
+      'raster-fade-duration': 200,
+    },
+  };
   const hillshade: LayerSpecification = {
     id: 'hillshade',
     type: 'hillshade',
     source: 'hillshade',
     paint: {
-      'hillshade-exaggeration': 0.55,
+      // Más suave sobre el satélite (ya trae sombras propias), más marcado en la ciudad.
+      'hillshade-exaggeration': ['interpolate', ['linear'], ['zoom'], 15.5, 0.2, 16.5, 0.5],
       'hillshade-shadow-color': '#1a2a21',
       'hillshade-highlight-color': '#f4f5f2',
       'hillshade-accent-color': '#2f4a3a',
@@ -67,15 +107,27 @@ export function buildStyle(opts: { exaggeration: number }): StyleSpecification {
     glyphs: GLYPHS_URL,
     sprite: SPRITE_URL,
     sources: {
-      ...(BASEMAP_URL
+      ...(BASEMAPS
         ? {
-            base: {
+            continente: {
               type: 'vector' as const,
-              url: `pmtiles://${BASEMAP_URL}`,
+              url: `pmtiles://${BASEMAPS.continente}`,
+              attribution: ATTRIBUTION.basemap,
+            },
+            amazonas: {
+              type: 'vector' as const,
+              url: `pmtiles://${BASEMAPS.amazonas}`,
               attribution: ATTRIBUTION.basemap,
             },
           }
         : {}),
+      satelite: {
+        type: 'raster' as const,
+        tiles: [SATELLITE_TILES],
+        tileSize: 256,
+        maxzoom: SATELLITE_MAXZOOM,
+        attribution: ATTRIBUTION.satellite,
+      },
       terrain: terrainSource,
       hillshade: { ...terrainSource, attribution: '' },
       ...narrativeSources,
@@ -90,6 +142,12 @@ export function buildStyle(opts: { exaggeration: number }): StyleSpecification {
       'fog-ground-blend': 0.25,
       'atmosphere-blend': 0.4,
     },
-    layers: [...base.slice(0, insertAt), hillshade, ...base.slice(insertAt), ...narrativeLayers],
+    layers: [
+      ...base.slice(0, insertAt),
+      satellite,
+      hillshade,
+      ...base.slice(insertAt),
+      ...narrativeLayers,
+    ],
   };
 }

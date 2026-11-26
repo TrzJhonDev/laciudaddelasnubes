@@ -187,10 +187,6 @@ export class MapController {
     this.map?.resize();
   }
 
-  pause(): void {
-    this.map?.stop();
-  }
-
   destroy(): void {
     this.map?.remove();
     this.map = null;
