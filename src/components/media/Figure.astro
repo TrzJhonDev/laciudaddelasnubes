@@ -1,0 +1,77 @@
+---
+import { Picture } from 'astro:assets';
+import { getEntry } from 'astro:content';
+import type { ImageMetadata } from 'astro';
+
+// Imagen con pie, autor y licencia (§7.2). Los datos salen de la colección "media";
+// la imagen se optimiza con <Picture /> (AVIF/WebP, srcset). Falla el build si falta algo.
+
+interface Props {
+  id: string;
+  sizes?: string;
+  loading?: 'lazy' | 'eager';
+  class?: string;
+}
+
+const {
+  id,
+  sizes = '(min-width: 1024px) 40vw, 85vw',
+  loading = 'lazy',
+  class: className,
+} = Astro.props;
+const entry = await getEntry('media', id);
+if (!entry) throw new Error(`Figure: "${id}" no existe en src/content/media/media.json`);
+const m = entry.data;
+
+const images = import.meta.glob<{ default: ImageMetadata }>(
+  '/src/assets/images/**/*.{jpg,jpeg,png,webp}',
+);
+const loader = images[`/src/assets/images/${m.file}`];
+if (!loader) throw new Error(`Figure: no se encuentra la imagen src/assets/images/${m.file}`);
+const src = (await loader()).default;
+---
+
+<figure class:list={['media-figure', className]}>
+  <Picture
+    src={src}
+    alt={m.alt}
+    formats={['avif', 'webp']}
+    widths={[480, 800, 1200, 1600]}
+    sizes={sizes}
+    loading={loading}
+    decoding="async"
+  />
+  <figcaption>
+    <span>{m.caption}</span>
+    <small>
+      Foto: {m.sourceUrl ? <a href={m.sourceUrl} rel="noopener">{m.author}</a> : m.author}{' '}
+      · {m.licenseUrl ? <a href={m.licenseUrl} rel="license noopener">{m.license}</a> : m.license}
+    </small>
+  </figcaption>
+</figure>
+
+<style>
+  .media-figure {
+    margin: 0;
+  }
+  .media-figure :global(img) {
+    display: block;
+    inline-size: 100%;
+    block-size: auto;
+    aspect-ratio: 3 / 2;
+    object-fit: cover;
+    border-radius: 0.375rem;
+    background: var(--color-neblina-200);
+  }
+  figcaption {
+    display: grid;
+    gap: 0.125rem;
+    margin-block-start: 0.5rem;
+    font-size: 0.875rem;
+    line-height: 1.4;
+  }
+  small {
+    font-size: 0.75rem;
+    color: var(--color-piedra-700);
+  }
+</style>

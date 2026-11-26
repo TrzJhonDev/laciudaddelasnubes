@@ -48,6 +48,11 @@ async function start(data: StoryData, mapEl: HTMLElement) {
     ]);
     initIntro({ mobile: isMobile() });
     playCountersOnActive = playCounters;
+    // Galerías fijadas solo en escritorio; en móvil, swipe nativo (§9.6).
+    if (document.querySelector('[data-gallery]')) {
+      const { initGalleries } = await import('../anim/gallery');
+      gsap.matchMedia().add('(min-width: 1024px)', () => initGalleries());
+    }
   }
 
   // Pasos → store. Funciona aunque el mapa todavía no exista.

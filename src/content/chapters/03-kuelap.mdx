@@ -39,6 +39,7 @@ draft: true
 ---
 import Counter from '@/components/data/Counter.astro';
 import Hypotheses from '@/components/data/Hypotheses.astro';
+import HorizontalGallery from '@/components/media/HorizontalGallery.astro';
 import Step from '@/components/story/Step.astro';
 import KuelapPlan from '@/components/svg/KuelapPlan.astro';
 import ScaleCompare from '@/components/svg/ScaleCompare.astro';
@@ -80,6 +81,11 @@ import SourceNote from '@/components/ui/SourceNote.astro';
   guarda una cámara subterránea. Completan el conjunto el Templo Mayor y
   El Castillo, en el sector alto.<SourceNote id="andina-kuelap-monumental" />
 </Step>
+
+<HorizontalGallery
+  label="Galería de fotos de Kuélap"
+  ids={['kuelap-muralla-entrada', 'kuelap-friso-rombos', 'kuelap-el-tintero', 'kuelap-recintos', 'kuelap-paisaje']}
+/>
 
 <Step id="kuelap-06">
   ¿Para qué se construyó Kuélap? Los investigadores no se ponen de acuerdo. La interpretación

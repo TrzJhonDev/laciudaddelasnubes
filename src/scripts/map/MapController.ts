@@ -68,6 +68,10 @@ export class MapController {
         if (!map.loaded()) reject(e.error);
       });
     });
+    // La atribución empieza plegada en el botón ⓘ (en móvil, desplegada tapaba media pantalla).
+    container
+      .querySelector('.maplibregl-ctrl-attrib.maplibregl-compact-show')
+      ?.classList.remove('maplibregl-compact-show');
   }
 
   get instance(): MapLibreMap | null {

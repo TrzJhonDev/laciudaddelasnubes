@@ -1,1 +1,57 @@
-[]
+[
+  {
+    "id": "kuelap-muralla-entrada",
+    "file": "kuelap/muralla-entrada.jpg",
+    "alt": "Muralla de grandes bloques de piedra caliza de Kuélap, con una entrada estrecha y alta que se abre entre dos lienzos de muro.",
+    "caption": "Una de las entradas de Kuélap: un pasaje estrecho entre los muros de la muralla.",
+    "author": "Martin St-Amant",
+    "license": "CC BY 3.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by/3.0/",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Kuelap_-_Ao%C3%BBt_2007_-_12.jpg",
+    "sensitive": false
+  },
+  {
+    "id": "kuelap-recintos",
+    "file": "kuelap/casa-circular.jpg",
+    "alt": "Ruinas de recintos de piedra sobre la plataforma cubierta de pasto, con árboles a los lados y cadenas de montañas al fondo.",
+    "caption": "Restos de recintos sobre la plataforma de Kuélap, con las montañas al fondo.",
+    "author": "Ceciluqp",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Casa_circular_-_Ku%C3%A9lap.jpg",
+    "sensitive": false
+  },
+  {
+    "id": "kuelap-friso-rombos",
+    "file": "kuelap/friso-rombos.jpg",
+    "alt": "Muro curvo de una construcción circular con una franja decorativa de piedras en zigzag y rombos, sostenido por un puntal de madera.",
+    "caption": "Muro de una construcción circular con el friso en zigzag y rombos típico de los Chachapoya.",
+    "author": "Pitxiquin",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Casa_de_Kuelap_decorada_amb_les_formes_romboidals_de_la_cultura_Chachapoyas.jpg",
+    "sensitive": false
+  },
+  {
+    "id": "kuelap-el-tintero",
+    "file": "kuelap/el-tintero.jpg",
+    "alt": "Gran estructura de piedra con forma de cono invertido, más ancha arriba que abajo, rodeada de andamios y un techo de protección durante trabajos de conservación.",
+    "caption": "El Tintero durante trabajos de conservación, en 2007.",
+    "author": "Martin St-Amant",
+    "license": "CC BY 3.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by/3.0/",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Kuelap_-_El_Tintero_-_Ao%C3%BBt_2007.jpg",
+    "sensitive": false
+  },
+  {
+    "id": "kuelap-paisaje",
+    "file": "kuelap/paisaje.jpg",
+    "alt": "Montañas cubiertas de vegetación verde bajo un cielo con nubes, con casas de un poblado en la parte baja.",
+    "caption": "Las montañas verdes que rodean Kuélap, en 2023.",
+    "author": "Draceane",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Ku%C3%A9lap,_2023_(01).jpg",
+    "sensitive": false
+  }
+]

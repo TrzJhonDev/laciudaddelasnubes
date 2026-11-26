@@ -65,7 +65,23 @@ const fmtDate = (iso: string) =>
         <ul class="mt-4 space-y-3">
           {media.map(({ data: m }) => (
             <li id={`media-${m.id}`}>
-              {m.caption}. {m.author}, {m.license}.
+              {m.caption.replace(/\.$/, '')}. Foto:{' '}
+              {m.sourceUrl ? (
+                <a href={m.sourceUrl} rel="noopener">
+                  {m.author}
+                </a>
+              ) : (
+                m.author
+              )}
+              ,{' '}
+              {m.licenseUrl ? (
+                <a href={m.licenseUrl} rel="license noopener">
+                  {m.license}
+                </a>
+              ) : (
+                m.license
+              )}
+              .
             </li>
           ))}
         </ul>

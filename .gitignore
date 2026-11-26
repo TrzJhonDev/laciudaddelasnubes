@@ -33,3 +33,6 @@ Thumbs.db
 
 # herramientas locales (go-pmtiles)
 .tools/
+
+# hojas de revisión locales (no se publican)
+public/dev-*.html

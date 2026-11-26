@@ -1,0 +1,87 @@
+---
+/**
+ * Galería horizontal (§7.2): en escritorio se fija en pantalla y avanza en horizontal con el
+ * scroll (anim/gallery.ts); en móvil, con movimiento reducido o sin JS es una fila con
+ * desplazamiento nativo y scroll-snap. En /texto se ve como una lista de figuras.
+ */
+import Figure from './Figure.astro';
+
+interface Props {
+  ids: string[];
+  label: string;
+}
+
+const { ids, label } = Astro.props;
+---
+
+<section class="h-gallery" aria-label={label} data-gallery>
+  <div class="h-gallery__track" data-gallery-track tabindex="0">
+    {
+      ids.map((id, i) => (
+        <div class="h-gallery__item">
+          <Figure id={id} loading={i < 2 ? 'eager' : 'lazy'} sizes="(min-width: 1024px) 42vw, 85vw" />
+        </div>
+      ))
+    }
+  </div>
+</section>
+
+<style>
+  .h-gallery {
+    margin-block: 1.5rem;
+  }
+  .h-gallery__track {
+    display: grid;
+    gap: 1.5rem;
+  }
+  .h-gallery__track:focus-visible {
+    outline-offset: 6px;
+  }
+
+  /* Dentro de la historia: banda a ancho completo sobre el mapa. */
+  :global(.story) .h-gallery {
+    margin: 0;
+    padding-block: 12svh;
+    background: rgb(14 20 18 / 0.88);
+    color: var(--color-neblina-50);
+    pointer-events: auto;
+  }
+  :global(.story) .h-gallery :global(small),
+  :global(.story) .h-gallery :global(small a) {
+    color: var(--color-neblina-200);
+  }
+  :global(.story) .h-gallery__track {
+    display: flex;
+    gap: 1.25rem;
+    padding-inline: 1rem;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    overscroll-behavior-x: contain;
+    scrollbar-width: thin;
+  }
+  :global(.story) .h-gallery__item {
+    flex: 0 0 min(85vw, 640px);
+    scroll-snap-align: center;
+  }
+  @media (min-width: 1024px) {
+    :global(.story) .h-gallery__track {
+      padding-inline: 6vw;
+    }
+    :global(.story) .h-gallery__item {
+      flex-basis: min(42vw, 720px);
+    }
+  }
+  /* Con el pin activo (escritorio), el desplazamiento lo maneja GSAP y la banda ocupa la pantalla. */
+  :global(.story) .h-gallery.is-pinned {
+    display: flex;
+    align-items: center;
+    min-block-size: 100svh;
+    padding-block: 0;
+    overflow: hidden;
+  }
+  :global(.story) .h-gallery.is-pinned .h-gallery__track {
+    overflow: visible;
+    scroll-snap-type: none;
+    inline-size: max-content;
+  }
+</style>
