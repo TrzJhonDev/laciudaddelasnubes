@@ -4,27 +4,31 @@ slug: kuelap
 title: 'Kuélap, la ciudad sobre la montaña'
 kicker: 'Más de mil años de piedra'
 summary: 'Una plataforma amurallada de casi 600 metros en la cima del cerro Barreta, con 420 estructuras circulares y una muralla de hasta 20 metros.'
-camera: { center: [-77.9233, -6.4179], zoom: 14, pitch: 60, bearing: 0, mobile: { zoom: 13.2, pitch: 50 } }
+camera: { center: [-77.9238, -6.4175], zoom: 13, pitch: 60, bearing: 0, mobile: { zoom: 12.4, pitch: 50 } }
 steps:
   - id: kuelap-01
-    camera: { center: [-77.9233, -6.4179], zoom: 15, pitch: 70, bearing: 0, mobile: { zoom: 14.2, pitch: 60 } }
+    camera: { center: [-77.9238, -6.4175], zoom: 14, pitch: 65, bearing: 0, mobile: { zoom: 13.4, pitch: 55 } }
   - id: kuelap-02
+    camera: { center: [-77.9238, -6.4175], zoom: 14.3, pitch: 68, bearing: 0, mobile: { zoom: 13.6, pitch: 58 } }
     orbit: { from: 0, to: 90 }
     layers: [kuelap-muralla]
   - id: kuelap-03
-    layers: [kuelap-muralla, kuelap-entradas]
+    camera: { center: [-77.9238, -6.4175], zoom: 14.3, pitch: 45, bearing: 90, mobile: { zoom: 13.6, pitch: 40 } }
+    layers: [kuelap-muralla]
   - id: kuelap-04
+    camera: { center: [-77.9238, -6.4175], zoom: 14.5, pitch: 60, bearing: 90, mobile: { zoom: 13.8, pitch: 55 } }
     orbit: { from: 90, to: 180 }
-    layers: [kuelap-recintos]
+    layers: [kuelap-muralla, kuelap-recintos]
   - id: kuelap-05
-    camera: { center: [-77.9233, -6.4179], zoom: 16, pitch: 72, bearing: -160, mobile: { zoom: 15.2, pitch: 60 } }
-    layers: [kuelap-tintero]
+    camera: { center: [-77.9238, -6.4175], zoom: 14.5, pitch: 70, bearing: -160, mobile: { zoom: 13.8, pitch: 58 } }
+    layers: [kuelap-muralla, kuelap-hitos]
   - id: kuelap-06
-    orbit: { from: 200, to: 270 }
+    camera: { center: [-77.9238, -6.4175], zoom: 13.8, pitch: 65, bearing: -160, mobile: { zoom: 13.1, pitch: 55 } }
+    orbit: { from: -160, to: -90 }
   - id: kuelap-07
-    camera: { center: [-77.9233, -6.4179], zoom: 13, pitch: 55, bearing: -90 }
+    camera: { center: [-77.9238, -6.4175], zoom: 12.8, pitch: 55, bearing: -90, mobile: { zoom: 12, pitch: 50 } }
   - id: kuelap-08
-    camera: { center: [-77.9233, -6.4179], zoom: 12, pitch: 45, bearing: -60, mobile: { zoom: 11.2, pitch: 40 } }
+    camera: { center: [-77.9238, -6.4175], zoom: 11.8, pitch: 45, bearing: -60, mobile: { zoom: 11, pitch: 40 } }
 sources:
   - andina-kuelap-monumental
   - andina-kuelap-reapertura
@@ -34,7 +38,10 @@ liteImage: /lite/kuelap.avif
 draft: true
 ---
 import Counter from '@/components/data/Counter.astro';
+import Hypotheses from '@/components/data/Hypotheses.astro';
 import Step from '@/components/story/Step.astro';
+import KuelapPlan from '@/components/svg/KuelapPlan.astro';
+import ScaleCompare from '@/components/svg/ScaleCompare.astro';
 import SourceNote from '@/components/ui/SourceNote.astro';
 
 {/* BORRADOR F1.4 · pendiente de revisión por especialista (F1.6).
@@ -52,12 +59,14 @@ import SourceNote from '@/components/ui/SourceNote.astro';
   Lo primero que impresiona es la muralla. En algunos tramos alcanza unos 19 a 20 metros de alto,
   la altura de un edificio de seis pisos.<SourceNote id="andina-kuelap-monumental" /> Rodea toda
   la plataforma y la convierte en una isla de piedra sobre las nubes.
+  <ScaleCompare />
 </Step>
 
 <Step id="kuelap-03">
   Para entrar solo hay tres accesos: dos en el lado este y uno en el oeste.<SourceNote id="church-vonhagen" />
   Son pasajes estrechos que obligan a entrar de pocos en pocos, un diseño que muchos investigadores
   relacionan con la defensa del sitio.
+  <KuelapPlan />
 </Step>
 
 <Step id="kuelap-04">
@@ -77,6 +86,7 @@ import SourceNote from '@/components/ui/SourceNote.astro';
   clásica la ve como una fortaleza militar. Federico Kauffmann Doig propuso que fue un centro
   administrativo y religioso. Otros creen que funcionó como un refugio fortificado para tiempos de
   emergencia.<SourceNote id="andina-kuelap-monumental" />
+  <Hypotheses />
 </Step>
 
 <Step id="kuelap-07">

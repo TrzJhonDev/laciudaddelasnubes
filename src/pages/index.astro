@@ -3,6 +3,7 @@ import { getCollection, render } from 'astro:content';
 import Chapter from '@/components/story/Chapter.astro';
 import StickyMap from '@/components/story/StickyMap.astro';
 import FrisoRombos from '@/components/svg/FrisoRombos.astro';
+import ProgressBar from '@/components/ui/ProgressBar.astro';
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import { buildStoryData } from '@/scripts/story/data';
 import '@/styles/story.css';
@@ -18,27 +19,40 @@ const storyData = buildStoryData(
   title="Chachapoyas: tierra de los hombres de la neblina"
   description="Un recorrido interactivo por más de mil años de historia de Chachapoyas y su territorio: Kuélap, Karajía, Revash, la colonia y la independencia."
 >
+  <ProgressBar />
   <div class="story">
     <StickyMap />
 
     <div class="story__content">
       <header class="story-hero" aria-labelledby="titulo">
+        <div class="story-hero__mist" aria-hidden="true">
+          <span data-mist></span>
+          <span data-mist></span>
+          <span data-mist></span>
+        </div>
         <div class="story-hero__inner mx-auto max-w-3xl">
-          <p class="font-mono text-sm tracking-[0.2em] text-ocre-500 uppercase">Amazonas · Perú</p>
-          <h1 id="titulo" class="mt-4 font-light">
-            Chachapoyas
-            <span class="mt-2 block text-h3 font-normal italic">tierra de los hombres de la neblina</span>
-          </h1>
-          <FrisoRombos class="mx-auto mt-8" count={11} />
-          <p class="mx-auto mt-8 max-w-[50ch] text-neblina-200">
-            Desliza para recorrer más de mil años de historia.
+          <p class="font-mono text-sm tracking-[0.2em] text-ocre-500 uppercase" data-intro-fade>
+            Amazonas · Perú
           </p>
-          <p class="mt-4 text-sm">
+          <h1 id="titulo" class="mt-4 font-light">
+            <span class="block" data-split>Chachapoyas</span>
+            <span class="mt-2 block text-h3 font-normal italic" data-intro-fade
+              >tierra de los hombres de la neblina</span
+            >
+          </h1>
+          <div data-intro-fade><FrisoRombos class="mx-auto mt-8" count={11} /></div>
+          <p class="mt-6 text-sm" data-intro-fade>
             <a href="/texto" class="inline-flex min-h-touch items-center px-2 text-neblina-50"
               >Prefiero leer la versión de texto</a
             >
           </p>
         </div>
+        <p class="story-hero__hint" data-scroll-hint>
+          <span class="story-hero__hint-label">Desliza para comenzar</span>
+          <svg viewBox="0 0 24 24" aria-hidden="true" width="20" height="20">
+            <path d="M6 9l6 6 6-6" fill="none" stroke="currentColor" stroke-width="2"></path>
+          </svg>
+        </p>
       </header>
 
       {

@@ -1,7 +1,8 @@
 ---
 /**
- * Nota de fuente inline: superíndice numerado que enlaza a /creditos.
- * Falla el build si el id no existe en sources.json.
+ * Nota de fuente inline (§7.5): un pequeño rombo que abre una ventana emergente nativa
+ * (atributo `popover`, sin JS) con la referencia y su enlace. Sin soporte de popover,
+ * el botón queda como enlace a /creditos. Falla el build si el id no existe en sources.json.
  */
 import { getEntry } from 'astro:content';
 
@@ -14,18 +15,99 @@ const source = await getEntry('sources', id);
 if (!source) {
   throw new Error(`SourceNote: la fuente "${id}" no existe en src/content/sources/sources.json`);
 }
-const label = `Fuente: ${source.data.publisher}, «${source.data.title}»`;
+const s = source.data;
+const popId = `fuente-pop-${id}-${Math.random().toString(36).slice(2, 8)}`;
+const label = `Fuente: ${s.publisher}`;
 ---
 
-<sup class="source-note"
-  ><a href={`/creditos#fuente-${id}`} title={label} aria-label={label}>[f]</a></sup
->
+<button
+  type="button"
+  class="source-note"
+  popovertarget={popId}
+  aria-label={label}
+  title={label}
+  data-href={`/creditos#fuente-${id}`}><span aria-hidden="true">◆</span></button
+><span popover id={popId} class="source-pop" role="note">
+  <strong>{s.publisher}</strong>
+  {s.author && <span class="block">{s.author}</span>}
+  <span class="block">«{s.title}»</span>
+  <span class="links">
+    {
+      s.url && (
+        <a href={s.url} rel="noopener" target="_blank" hreflang={s.lang}>
+          Abrir la fuente
+        </a>
+      )
+    }
+    <a href={`/creditos#fuente-${id}`}>Ver en créditos</a>
+  </span>
+</span>
+
+<script>
+  // Sin soporte de popover: el rombo lleva a la lista de créditos.
+  if (!HTMLElement.prototype.hasOwnProperty('popover')) {
+    for (const b of document.querySelectorAll<HTMLButtonElement>('button.source-note')) {
+      b.addEventListener('click', () => {
+        if (b.dataset['href']) location.href = b.dataset['href'];
+      });
+    }
+  }
+</script>
 
 <style>
-  .source-note a {
-    display: inline-block;
-    padding-inline: 0.15em;
-    font-size: 0.75em;
-    text-decoration: none;
+  .source-note {
+    display: inline-grid;
+    place-items: center;
+    inline-size: 1.4em;
+    block-size: 1.4em;
+    margin-inline-start: 0.1em;
+    padding: 0;
+    border: 0;
+    border-radius: 50%;
+    background: transparent;
+    color: var(--color-ocre-700);
+    font-size: 0.7em;
+    vertical-align: super;
+    line-height: 1;
+    cursor: pointer;
+  }
+  .source-note:hover {
+    background: rgb(194 124 58 / 0.15);
+  }
+  /* Área táctil de 44 px sin alterar el texto (§9.5). */
+  .source-note {
+    position: relative;
+  }
+  .source-note::after {
+    content: "";
+    position: absolute;
+    inset: -12px;
+  }
+  .source-pop {
+    position: fixed;
+    inset: auto 1rem max(1rem, env(safe-area-inset-bottom)) 1rem;
+    margin: 0 auto;
+    max-inline-size: 26rem;
+    padding: 1rem 1.25rem;
+    border: 0;
+    border-inline-start: 3px solid var(--color-ocre-500);
+    border-radius: 0.5rem;
+    background: var(--color-noche-950);
+    color: var(--color-neblina-50);
+    font-size: 0.875rem;
+    line-height: 1.5;
+    box-shadow: 0 12px 32px rgb(14 20 18 / 0.35);
+  }
+  .source-pop .block {
+    display: block;
+  }
+  .source-pop .links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.25rem 1rem;
+    margin-block-start: 0.5rem;
+  }
+  .source-pop a {
+    color: var(--color-ocre-500);
   }
 </style>

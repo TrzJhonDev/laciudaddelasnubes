@@ -15,6 +15,8 @@ import type { StoryData, StoryStep } from './data';
 
 gsap.registerPlugin(ScrollTrigger);
 
+let playCountersOnActive: ((scope: HTMLElement) => void) | null = null;
+
 const dataEl = document.getElementById('story-data');
 const mapEl = document.getElementById('story-map');
 if (dataEl && mapEl) void start(JSON.parse(dataEl.textContent ?? '{}') as StoryData, mapEl);
@@ -37,6 +39,17 @@ async function start(data: StoryData, mapEl: HTMLElement) {
 
   initSmoothScroll(reduced);
 
+  // Con movimiento reducido no se ocultan elementos para animarlos: todo se ve en su estado final.
+  if (!reduced) {
+    document.documentElement.dataset.anim = '';
+    const [{ initIntro }, { playCounters }] = await Promise.all([
+      import('../anim/intro'),
+      import('../anim/counters'),
+    ]);
+    initIntro({ mobile: isMobile() });
+    playCountersOnActive = playCounters;
+  }
+
   // Pasos → store. Funciona aunque el mapa todavía no exista.
   for (const el of document.querySelectorAll<HTMLElement>('[data-step]')) {
     const step = stepById.get(el.dataset.step ?? '');
@@ -47,7 +60,9 @@ async function start(data: StoryData, mapEl: HTMLElement) {
       end: 'bottom 35%',
       onToggle: (self) => {
         el.classList.toggle('is-active', self.isActive);
-        if (self.isActive) setStep(step.chapter, step.id);
+        if (!self.isActive) return;
+        setStep(step.chapter, step.id);
+        playCountersOnActive?.(el);
       },
       onUpdate: (self) => {
         if (!controller || !self.isActive) return;
@@ -60,11 +75,15 @@ async function start(data: StoryData, mapEl: HTMLElement) {
     });
   }
 
-  // Progreso global para la barra superior (fallback de la animación CSS).
+  // Progreso global; también alimenta la barra superior donde no hay CSS scroll-driven.
+  const bar = document.querySelector<HTMLElement>('.progress');
   ScrollTrigger.create({
     start: 0,
     end: 'max',
-    onUpdate: (self) => $narrative.setKey('progress', self.progress),
+    onUpdate: (self) => {
+      $narrative.setKey('progress', self.progress);
+      bar?.style.setProperty('--progress', self.progress.toFixed(4));
+    },
   });
 
   if (lite) return;
@@ -115,8 +134,10 @@ async function start(data: StoryData, mapEl: HTMLElement) {
   const mm = gsap.matchMedia();
   mm.add(
     {
-      isDesktop: '(min-width: 1024px)',
-      isTablet: '(min-width: 768px) and (max-width: 1023px)',
+      // Deben coincidir con las media queries de story.css.
+      isDesktop:
+        '(min-width: 1024px), (min-width: 768px) and (orientation: landscape) and (min-height: 501px)',
+      isTablet: '(min-width: 768px) and (max-width: 1023px) and (orientation: portrait)',
       // Sin esta condición, gsap.matchMedia no ejecuta el callback en móvil.
       isMobile: '(max-width: 767px)',
       isLandscapePhone: '(orientation: landscape) and (max-height: 500px)',
@@ -131,9 +152,15 @@ async function start(data: StoryData, mapEl: HTMLElement) {
         c['isLandscapePhone']
           ? { top: 0, bottom: 0, left: 0, right: w * 0.45 }
           : c['isDesktop']
-            ? { top: 0, bottom: 0, left: Math.min(w * 0.38, 520), right: 80 }
+            ? // columna de texto (clamp(300px, 38vw, 520px)) + su margen izquierdo (4vw)
+              {
+                top: 0,
+                bottom: 0,
+                left: Math.min(Math.max(300, w * 0.38), 520) + w * 0.04,
+                right: 40,
+              }
             : c['isTablet']
-              ? { top: 0, bottom: h * 0.3, left: 0, right: 0 }
+              ? { top: 0, bottom: h * 0.5, left: 0, right: 0 }
               : { top: 0, bottom: h * 0.45, left: 0, right: 0 },
       );
       controller?.resize();

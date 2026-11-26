@@ -1,0 +1,62 @@
+---
+/** Tres tarjetas con las hipótesis sobre la función de Kuélap (§3, Cap. 3, paso 6). */
+const items = [
+  { title: 'Fortaleza', body: 'Interpretación clásica: un enclave militar defensivo.' },
+  {
+    title: 'Centro ceremonial',
+    body: 'Federico Kauffmann Doig: centro administrativo y religioso.',
+  },
+  { title: 'Refugio', body: 'Lugar fortificado para tiempos de emergencia.' },
+];
+---
+
+<ul class="hypotheses" aria-label="Hipótesis sobre la función de Kuélap">
+  {
+    items.map((h, i) => (
+      <li style={`--i:${i}`}>
+        <strong>{h.title}</strong>
+        <span>{h.body}</span>
+      </li>
+    ))
+  }
+</ul>
+
+<style>
+  .hypotheses {
+    display: grid;
+    gap: 0.5rem;
+    margin-block-start: 1rem;
+    padding: 0;
+    list-style: none;
+  }
+  @container (min-width: 420px) {
+    .hypotheses {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+  li {
+    display: grid;
+    gap: 0.25rem;
+    padding: 0.75rem;
+    border-radius: 0.375rem;
+    border-inline-start: 3px solid var(--color-ocre-500);
+    background: var(--color-neblina-200);
+    font-size: 0.875rem;
+    line-height: 1.4;
+  }
+  strong {
+    font-family: var(--font-display);
+    font-size: 1rem;
+  }
+  :global(:root[data-anim]) li {
+    opacity: 0;
+    transform: translateY(8px);
+    transition:
+      opacity 600ms var(--ease-out-power3) calc(var(--i) * 150ms),
+      transform 600ms var(--ease-out-power3) calc(var(--i) * 150ms);
+  }
+  :global(.step.is-active) li {
+    opacity: 1;
+    transform: none;
+  }
+</style>

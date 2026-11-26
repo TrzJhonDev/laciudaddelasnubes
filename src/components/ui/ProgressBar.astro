@@ -1,0 +1,45 @@
+---
+/**
+ * Barra de progreso superior (§7.5): CSS scroll-driven donde hay soporte y, si no, el script
+ * de la historia actualiza --progress. Es decorativa: el avance real lo indica el texto.
+ */
+---
+
+<div class="progress" aria-hidden="true"><span></span></div>
+
+<style>
+  .progress {
+    position: fixed;
+    inset-inline: 0;
+    inset-block-start: 0;
+    z-index: 50;
+    block-size: 3px;
+    background: rgb(14 20 18 / 0.25);
+    pointer-events: none;
+  }
+  span {
+    display: block;
+    block-size: 100%;
+    background: repeating-linear-gradient(
+      90deg,
+      var(--color-ocre-500) 0 10px,
+      var(--color-piedra-400) 10px 14px
+    );
+    transform-origin: left;
+    transform: scaleX(var(--progress, 0));
+  }
+  @supports (animation-timeline: scroll()) {
+    span {
+      animation: grow linear both;
+      animation-timeline: scroll(root);
+    }
+    @keyframes grow {
+      from {
+        transform: scaleX(0);
+      }
+      to {
+        transform: scaleX(1);
+      }
+    }
+  }
+</style>

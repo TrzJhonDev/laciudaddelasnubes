@@ -10,7 +10,7 @@ import {
   orbitBearing,
   pointAlong,
 } from './camera';
-import { narrativeLayerMap, routeSources } from './layers';
+import { narrativeLayerMap, narrativeLayerOpacity, routeSources } from './layers';
 import { buildStyle } from './style';
 
 // MapLibre 6 busca su worker junto a su propio módulo, pero Vite lo reubica (y en desarrollo le
@@ -153,7 +153,8 @@ export class MapController {
     if (!map || !entries) return; // capa aún no implementada (se añade en F4)
     for (const { layer, props } of entries) {
       if (!map.getLayer(layer)) continue;
-      for (const p of props) map.setPaintProperty(layer, p as 'line-opacity', value);
+      const v = value * (narrativeLayerOpacity[layer] ?? 1);
+      for (const p of props) map.setPaintProperty(layer, p as 'line-opacity', v);
     }
   }
 

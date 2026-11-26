@@ -1,0 +1,189 @@
+---
+/**
+ * Planta de Kuélap generada en el build desde public/data/kuelap.geojson (OpenStreetMap):
+ * contorno de la muralla, muros interiores y una muestra de recintos circulares.
+ * El eje largo (≈ 594 m, casi norte-sur) se gira a horizontal para que quepa en la tarjeta.
+ * Sin JS se ve completa; con la historia activa se "dibuja" al entrar el paso (§3, Cap. 3).
+ */
+import { readFileSync } from 'node:fs';
+import { join } from 'node:path';
+
+interface Props {
+  /** Qué resaltar: la muralla o los recintos. */
+  highlight?: 'muralla' | 'recintos';
+}
+const { highlight = 'muralla' } = Astro.props;
+
+type Pos = [number, number];
+interface Feature {
+  properties: { kind: string; name?: string };
+  geometry: { type: string; coordinates: Pos | Pos[] | Pos[][] };
+}
+const fc = JSON.parse(readFileSync(join(process.cwd(), 'public/data/kuelap.geojson'), 'utf8')) as {
+  features: Feature[];
+};
+
+// Proyección local en metros (equirectangular, suficiente para 600 m).
+const all: Pos[] = fc.features.flatMap((f) => {
+  const c = f.geometry.coordinates;
+  if (f.geometry.type === 'Point') return [c as Pos];
+  if (f.geometry.type === 'Polygon') return (c as Pos[][])[0] ?? [];
+  return c as Pos[];
+});
+const lat0 = all.reduce((s, p) => s + p[1], 0) / all.length;
+const lng0 = all.reduce((s, p) => s + p[0], 0) / all.length;
+const mx = 111_320 * Math.cos((lat0 * Math.PI) / 180);
+const my = 110_574;
+// Giro de 90° en sentido horario (sin espejo): el norte apunta a la derecha y el este hacia
+// abajo, en coordenadas de pantalla (y crece hacia abajo).
+const pt = ([lng, lat]: Pos): Pos => [(lat - lat0) * my, (lng - lng0) * mx];
+
+const pts = all.map(pt);
+const pad = 24;
+const minX = Math.min(...pts.map((p) => p[0])) - pad;
+const maxX = Math.max(...pts.map((p) => p[0])) + pad;
+const minY = Math.min(...pts.map((p) => p[1])) - pad;
+const maxY = Math.max(...pts.map((p) => p[1])) + pad;
+const vb = `${minX.toFixed(1)} ${minY.toFixed(1)} ${(maxX - minX).toFixed(1)} ${(maxY - minY + 40).toFixed(1)}`;
+
+const toPath = (ring: Pos[], close: boolean) =>
+  ring
+    .map(pt)
+    .map(([x, y], i) => `${i ? 'L' : 'M'}${x.toFixed(1)} ${y.toFixed(1)}`)
+    .join('') + (close ? 'Z' : '');
+
+const muralla = fc.features.find((f) => f.properties.kind === 'muralla');
+const outline = muralla ? toPath((muralla.geometry.coordinates as Pos[][])[0] ?? [], true) : '';
+const tramos = fc.features
+  .filter((f) => f.properties.kind === 'muralla-tramo')
+  .map((f) => toPath(f.geometry.coordinates as Pos[], false));
+const recintos = fc.features
+  .filter((f) => f.properties.kind === 'recinto')
+  .map((f) => toPath((f.geometry.coordinates as Pos[][])[0] ?? [], true));
+const hitos = fc.features
+  .filter((f) => f.properties.kind === 'hito')
+  .map((f) => ({ name: f.properties.name ?? '', at: pt(f.geometry.coordinates as Pos) }));
+
+const scaleY = maxY + 18;
+const scaleX = minX + pad;
+---
+
+<figure class="kuelap-plan" data-highlight={highlight}>
+  <svg
+    viewBox={vb}
+    role="img"
+    aria-labelledby="kuelap-plan-title kuelap-plan-desc"
+    preserveAspectRatio="xMidYMid meet"
+  >
+    <title id="kuelap-plan-title">Planta simplificada de Kuélap</title>
+    <desc id="kuelap-plan-desc">
+      Contorno alargado de la muralla, de unos 594 metros de largo, con muros interiores y una
+      muestra de 19 recintos circulares. El norte apunta a la derecha.
+    </desc>
+    <path class="kp-outline" d={outline} pathLength="1"></path>
+    {tramos.map((d) => <path class="kp-tramo" d={d} pathLength="1" />)}
+    {recintos.map((d, i) => <path class="kp-recinto" d={d} style={`--i:${i}`} />)}
+    {
+      hitos.map((h) => (
+        <g class="kp-hito">
+          <circle cx={h.at[0].toFixed(1)} cy={h.at[1].toFixed(1)} r="4" />
+          <text x={(h.at[0] + 8).toFixed(1)} y={(h.at[1] - 8).toFixed(1)}>
+            {h.name}
+          </text>
+        </g>
+      ))
+    }
+    <g class="kp-scale" transform={`translate(${scaleX.toFixed(1)} ${scaleY.toFixed(1)})`}>
+      <path d="M0 0H100M0 -4V4M100 -4V4"></path>
+      <text x="50" y="16">100 m</text>
+    </g>
+    <g class="kp-north" transform={`translate(${(maxX - 30).toFixed(1)} ${scaleY.toFixed(1)})`}>
+      <path d="M-14 0H10M4 -5L10 0L4 5"></path>
+      <text x="-26" y="4">N</text>
+    </g>
+  </svg>
+  <figcaption>
+    Planta simplificada a partir de datos de{' '}
+    <a href="https://www.openstreetmap.org/way/157862627">OpenStreetMap</a> (ODbL). Se muestran 19
+    de los recintos circulares mapeados.
+  </figcaption>
+</figure>
+
+<style>
+  .kuelap-plan {
+    margin-block-start: 1rem;
+  }
+  svg {
+    display: block;
+    inline-size: 100%;
+    block-size: auto;
+    max-block-size: 11rem;
+    overflow: visible;
+  }
+  path {
+    fill: none;
+    stroke-linejoin: round;
+    stroke-linecap: round;
+  }
+  .kp-outline {
+    stroke: var(--color-ocre-700);
+    stroke-width: 4;
+    fill: rgb(194 124 58 / 0.08);
+  }
+  .kp-tramo {
+    stroke: var(--color-piedra-600);
+    stroke-width: 2.5;
+  }
+  .kp-recinto {
+    stroke: var(--color-bosque-700);
+    stroke-width: 1.5;
+    fill: rgb(47 74 58 / 0.18);
+  }
+  [data-highlight="recintos"] .kp-recinto {
+    stroke-width: 2;
+    fill: rgb(47 74 58 / 0.45);
+  }
+  .kp-hito circle {
+    fill: var(--color-bosque-900);
+  }
+  .kp-hito text,
+  .kp-scale text,
+  .kp-north text {
+    font: 600 13px var(--font-sans);
+    fill: var(--color-bosque-900);
+  }
+  .kp-scale text {
+    text-anchor: middle;
+  }
+  .kp-scale path,
+  .kp-north path {
+    stroke: var(--color-bosque-900);
+    stroke-width: 2;
+  }
+  figcaption {
+    margin-block-start: 0.5rem;
+    font-size: 0.75rem;
+    color: var(--color-piedra-700);
+  }
+
+  /* Animación (solo en la historia con JS y sin movimiento reducido). */
+  :global(:root[data-anim]) .kp-outline,
+  :global(:root[data-anim]) .kp-tramo {
+    stroke-dasharray: 1;
+    stroke-dashoffset: 1;
+    transition: stroke-dashoffset 1800ms var(--ease-out-power3);
+  }
+  :global(:root[data-anim]) .kp-recinto,
+  :global(:root[data-anim]) .kp-hito {
+    opacity: 0;
+    transition: opacity 500ms var(--ease-out-power3) calc(900ms + var(--i, 0) * 40ms);
+  }
+  :global(.step.is-active) .kp-outline,
+  :global(.step.is-active) .kp-tramo {
+    stroke-dashoffset: 0;
+  }
+  :global(.step.is-active) .kp-recinto,
+  :global(.step.is-active) .kp-hito {
+    opacity: 1;
+  }
+</style>

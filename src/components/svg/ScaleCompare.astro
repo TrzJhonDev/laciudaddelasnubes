@@ -1,0 +1,120 @@
+---
+/**
+ * Comparador de escala (§3, Cap. 3): la muralla de Kuélap (hasta ~20 m) frente a un edificio
+ * de 6 pisos (~18 m, a 3 m por piso) y una persona de 1.70 m. Escala común: 1 m = 8 unidades.
+ */
+const U = 8;
+const ground = 20 * U + 30;
+const wallH = 20 * U;
+const buildH = 18 * U;
+const personH = 1.7 * U;
+---
+
+<figure class="scale-compare">
+  <svg
+    viewBox={`0 0 340 ${ground + 26}`}
+    role="img"
+    aria-labelledby="scale-title scale-desc"
+  >
+    <title id="scale-title">Escala de la muralla de Kuélap</title>
+    <desc id="scale-desc">
+      La muralla, de hasta unos 20 metros, junto a un edificio de seis pisos de unos 18 metros y una
+      persona de 1.70 metros dibujados a la misma escala.
+    </desc>
+    <line class="sc-ground" x1="0" y1={ground} x2="340" y2={ground}></line>
+
+    <g class="sc-wall">
+      <path
+        d={`M20 ${ground}V${ground - wallH}H130V${ground}Z`}
+      ></path>
+      {
+        Array.from({ length: 9 }, (_, i) => (
+          <line x1="20" x2="130" y1={ground - (i + 1) * (wallH / 10)} y2={ground - (i + 1) * (wallH / 10)} />
+        ))
+      }
+      <text x="75" y={ground - wallH - 8}>Muralla · ~20 m</text>
+    </g>
+
+    <g class="sc-building">
+      <rect x="180" y={ground - buildH} width="70" height={buildH}></rect>
+      {
+        Array.from({ length: 5 }, (_, i) => (
+          <line x1="180" x2="250" y1={ground - (i + 1) * (buildH / 6)} y2={ground - (i + 1) * (buildH / 6)} />
+        ))
+      }
+      <text x="215" y={ground - buildH - 8}>6 pisos · ~18 m</text>
+    </g>
+
+    <g class="sc-person" transform={`translate(290 ${ground - personH})`}>
+      <circle cx="0" cy="1.6" r="1.6"></circle>
+      <rect x="-1.4" y="3.4" width="2.8" height={personH - 3.4} rx="1"></rect>
+      <text x="0" y="-6">1.70 m</text>
+    </g>
+  </svg>
+  <figcaption>Dibujado a escala. Alturas aproximadas.</figcaption>
+</figure>
+
+<style>
+  .scale-compare {
+    margin-block-start: 1rem;
+  }
+  svg {
+    display: block;
+    inline-size: 100%;
+    max-block-size: 12rem;
+  }
+  text {
+    font: 600 12px var(--font-sans);
+    fill: var(--color-bosque-900);
+    text-anchor: middle;
+  }
+  .sc-ground {
+    stroke: var(--color-piedra-600);
+    stroke-width: 2;
+  }
+  .sc-wall path {
+    fill: var(--color-piedra-400);
+    stroke: var(--color-piedra-600);
+    stroke-width: 2;
+  }
+  .sc-wall line {
+    stroke: var(--color-piedra-600);
+    stroke-width: 0.75;
+    opacity: 0.6;
+  }
+  .sc-building rect {
+    fill: var(--color-neblina-200);
+    stroke: var(--color-bosque-700);
+    stroke-width: 2;
+  }
+  .sc-building line {
+    stroke: var(--color-bosque-700);
+    stroke-width: 1;
+    opacity: 0.6;
+  }
+  .sc-person circle,
+  .sc-person rect {
+    fill: var(--color-ocre-700);
+  }
+  figcaption {
+    margin-block-start: 0.5rem;
+    font-size: 0.75rem;
+    color: var(--color-piedra-700);
+  }
+
+  /* Las figuras crecen desde el suelo al entrar el paso. */
+  :global(:root[data-anim]) .sc-wall,
+  :global(:root[data-anim]) .sc-building {
+    transform: scaleY(0);
+    transform-box: fill-box;
+    transform-origin: bottom;
+    transition: transform 1100ms var(--ease-out-expo);
+  }
+  :global(:root[data-anim]) .sc-building {
+    transition-delay: 250ms;
+  }
+  :global(.step.is-active) .sc-wall,
+  :global(.step.is-active) .sc-building {
+    transform: scaleY(1);
+  }
+</style>
