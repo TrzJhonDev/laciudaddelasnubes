@@ -1,0 +1,42 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: pnpm
+
+      - run: pnpm install --frozen-lockfile
+
+      - name: Lint y formato (Biome)
+        run: pnpm lint
+
+      - name: Tests unitarios (Vitest)
+        run: pnpm test
+
+      - name: Tipos, esquema de contenido y build
+        run: pnpm build
+
+      # F2: se añaden aquí Playwright (e2e + a11y + visuales) y Lighthouse CI.
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: dist
+          path: dist
+          retention-days: 7

@@ -1,0 +1,182 @@
+@import "tailwindcss";
+
+/*
+ * Tokens de diseño "Neblina y piedra" (documento maestro §4).
+ * Contraste WCAG medido (texto normal necesita ≥ 4.5:1):
+ *   bosque-900 / neblina-50  13.7   ✔ texto principal
+ *   bosque-700 / neblina-50   8.9   ✔ acento y enlaces
+ *   piedra-600 / neblina-50   4.1   ✘ solo bordes, iconos o texto ≥ 24px
+ *   ocre-500   / neblina-50   3.1   ✘ solo decoración y UI (≥ 3:1)
+ *   piedra-400 / neblina-50   2.5   ✘ solo frisos decorativos
+ *   ocre-700   / neblina-50   5.7   ✔ cifras destacadas sobre fondo claro (añadido)
+ *   piedra-700 / neblina-50   5.8   ✔ texto secundario en tono piedra (añadido)
+ *   neblina-50 / noche-950   17.0   ✔ modo oscuro / intro
+ *   ocre-500   / noche-950    5.5   ✔ cifras destacadas sobre fondo oscuro
+ */
+@theme {
+  /* Paleta */
+  --color-neblina-50: #f4f5f2;
+  --color-neblina-200: #dde1da;
+  --color-bosque-700: #2f4a3a;
+  --color-bosque-900: #1a2a21;
+  --color-piedra-400: #b59a72;
+  --color-piedra-600: #8c7350;
+  --color-piedra-700: #735c3e;
+  --color-ocre-500: #c27c3a;
+  --color-ocre-700: #8f521c;
+  --color-noche-950: #0e1412;
+
+  /* Tipografía (las variables --font-* las genera la Fonts API de Astro) */
+  --font-display: var(--font-fraunces);
+  --font-sans: var(--font-inter);
+  --font-mono: ui-monospace, "JetBrains Mono", "SFMono-Regular", Menlo, monospace;
+
+  /* Escala fluida (§4.3) */
+  --text-body: clamp(1rem, 0.95rem + 0.25vw, 1.125rem);
+  --text-h3: clamp(1.25rem, 1.1rem + 0.6vw, 1.625rem);
+  --text-h2: clamp(1.75rem, 1.4rem + 1.6vw, 2.75rem);
+  --text-h1: clamp(2.5rem, 1.8rem + 3.5vw, 5rem);
+
+  /* Breakpoints (§9.1). xs es el valor por defecto (< 480px). */
+  --breakpoint-sm: 30rem; /* 480px */
+  --breakpoint-md: 48rem; /* 768px */
+  --breakpoint-lg: 64rem; /* 1024px */
+  --breakpoint-xl: 90rem; /* 1440px */
+  --breakpoint-2xl: 120rem; /* 1920px */
+
+  /* Movimiento (§4.4) */
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-out-power3: cubic-bezier(0.215, 0.61, 0.355, 1);
+  --ease-in-out-cubic: cubic-bezier(0.645, 0.045, 0.355, 1);
+  --duration-micro: 180ms;
+  --duration-text: 750ms;
+  --duration-reveal: 1000ms;
+
+  /* Layout */
+  --spacing-story-col: min(38vw, 520px);
+  --spacing-touch: 2.75rem; /* 44px: área táctil mínima */
+}
+
+/* Variante para teléfonos en horizontal (§9.1, landscape-phone) */
+@custom-variant landscape-phone (@media (orientation: landscape) and (max-height: 500px));
+
+/* Variante para usuarios que piden menos movimiento (sistema o MotionToggle) */
+@custom-variant reduced-motion {
+  @media (prefers-reduced-motion: reduce) {
+    @slot;
+  }
+  :root[data-motion="reduce"] & {
+    @slot;
+  }
+}
+
+@layer base {
+  :root {
+    color-scheme: light;
+    --surface: var(--color-neblina-50);
+    --surface-raised: var(--color-neblina-200);
+    --text: var(--color-bosque-900);
+    --text-accent: var(--color-bosque-700);
+    --text-data: var(--color-ocre-700);
+    --focus-ring: var(--color-ocre-500);
+  }
+
+  /* Superficie oscura para la intro y zonas nocturnas */
+  .theme-noche {
+    color-scheme: dark;
+    --surface: var(--color-noche-950);
+    --surface-raised: #18211d;
+    --text: var(--color-neblina-50);
+    --text-accent: var(--color-neblina-200);
+    --text-data: var(--color-ocre-500);
+  }
+
+  html {
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+  }
+
+  body {
+    background-color: var(--surface);
+    color: var(--text);
+    font-family: var(--font-sans);
+    font-size: var(--text-body);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  h1,
+  h2,
+  h3 {
+    font-family: var(--font-display);
+    line-height: 1.1;
+    text-wrap: balance;
+  }
+  h1 {
+    font-size: var(--text-h1);
+  }
+  h2 {
+    font-size: var(--text-h2);
+  }
+  h3 {
+    font-size: var(--text-h3);
+  }
+
+  p {
+    text-wrap: pretty;
+  }
+
+  a {
+    color: var(--text-accent);
+    text-underline-offset: 0.2em;
+  }
+
+  /* Foco visible y personalizado (§11) */
+  :focus-visible {
+    outline: 3px solid var(--focus-ring);
+    outline-offset: 3px;
+    border-radius: 2px;
+  }
+
+  /* Cifras alineadas en contadores y fechas */
+  .tabular {
+    font-variant-numeric: tabular-nums;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+}
+
+@layer components {
+  /* Enlace "Saltar al contenido" */
+  .skip-link {
+    position: absolute;
+    inset-inline-start: 1rem;
+    inset-block-start: -100%;
+    z-index: 100;
+    padding: 0.75rem 1rem;
+    background: var(--color-bosque-900);
+    color: var(--color-neblina-50);
+    border-radius: 0.25rem;
+  }
+  .skip-link:focus {
+    inset-block-start: 1rem;
+  }
+
+  .sr-only-focusable:not(:focus):not(:focus-within) {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+}

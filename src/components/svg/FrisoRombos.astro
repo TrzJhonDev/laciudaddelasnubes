@@ -1,0 +1,46 @@
+---
+/**
+ * Friso en rombos chachapoya: motivo gráfico recurrente (§4.1).
+ * En F0 es estático; en F4 se anima con DrawSVG.
+ */
+interface Props {
+  /** Número de rombos. */
+  count?: number;
+  class?: string;
+}
+
+const { count = 9, class: className } = Astro.props;
+const w = 24;
+const h = 16;
+const rombos = Array.from({ length: count }, (_, i) => i * w);
+---
+
+<svg
+  class:list={['friso-rombos', className]}
+  viewBox={`0 0 ${count * w} ${h}`}
+  width={count * w}
+  height={h}
+  aria-hidden="true"
+  focusable="false"
+>
+  <g fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="miter">
+    {
+      rombos.map((x) => (
+        <>
+          <path d={`M${x} ${h / 2} L${x + w / 2} 1 L${x + w} ${h / 2} L${x + w / 2} ${h - 1} Z`} />
+          <path
+            d={`M${x + w / 2 - 4} ${h / 2} L${x + w / 2} ${h / 2 - 4} L${x + w / 2 + 4} ${h / 2} L${x + w / 2} ${h / 2 + 4} Z`}
+          />
+        </>
+      ))
+    }
+  </g>
+</svg>
+
+<style>
+  .friso-rombos {
+    color: var(--color-piedra-400);
+    max-inline-size: 100%;
+    height: auto;
+  }
+</style>

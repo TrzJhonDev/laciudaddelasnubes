@@ -1,0 +1,37 @@
+---
+import Head from '@/components/seo/Head.astro';
+import '@/styles/global.css';
+
+interface Props {
+  title: string;
+  description: string;
+  ogImage?: string;
+  /** Aplica la superficie oscura (intro, pantallas nocturnas). */
+  dark?: boolean;
+}
+
+const { title, description, ogImage, dark = false } = Astro.props;
+---
+
+<!doctype html>
+<html lang="es" class:list={[{ 'theme-noche': dark }]}>
+  <head>
+    <Head title={title} description={description} ogImage={ogImage} />
+    <script is:inline>
+      // Preferencia manual de movimiento (MotionToggle). Se aplica antes del primer pintado.
+      try {
+        if (localStorage.getItem('motion') === 'reduce') {
+          document.documentElement.dataset.motion = 'reduce';
+        }
+      } catch {}
+    </script>
+  </head>
+  <body class="min-h-svh">
+    <a class="skip-link" href="#contenido">Saltar al contenido</a>
+    <slot name="header" />
+    <main id="contenido" tabindex="-1">
+      <slot />
+    </main>
+    <slot name="footer" />
+  </body>
+</html>

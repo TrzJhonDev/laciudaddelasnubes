@@ -1,0 +1,15 @@
+---
+import FrisoRombos from '@/components/svg/FrisoRombos.astro';
+import BaseLayout from '@/layouts/BaseLayout.astro';
+---
+
+<BaseLayout title="Página no encontrada" description="Esta página se perdió entre la neblina." dark>
+  <section class="grid min-h-svh place-items-center px-4 text-center">
+    <div>
+      <p class="tabular font-mono text-[var(--text-data)]">404</p>
+      <h1 class="mt-2 text-h2">Esta página se perdió entre la neblina</h1>
+      <FrisoRombos class="mx-auto mt-6" />
+      <p class="mt-6"><a href="/" class="inline-flex min-h-touch items-center">Volver al inicio</a></p>
+    </div>
+  </section>
+</BaseLayout>
