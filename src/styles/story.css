@@ -89,6 +89,42 @@
   z-index: 1;
 }
 
+/* Velo oscuro detrás del texto de la portada, para el contraste sobre el mapa (§11). */
+.story-hero__inner::before {
+  content: "";
+  position: absolute;
+  inset: -3rem -2rem;
+  z-index: -1;
+  border-radius: 50%;
+  background: radial-gradient(
+    closest-side,
+    rgb(14 20 18 / 0.78),
+    rgb(14 20 18 / 0.5) 60%,
+    transparent
+  );
+  pointer-events: none;
+}
+
+/* Título: aparece desde la neblina solo con CSS, sin esperar al JS (es el elemento LCP). */
+.hero-title {
+  animation: hero-title-in 1.4s var(--ease-out-power3) both;
+}
+@keyframes hero-title-in {
+  from {
+    opacity: 0.08;
+    letter-spacing: 0.12em;
+    filter: blur(8px);
+  }
+  to {
+    opacity: 1;
+    letter-spacing: normal;
+    filter: none;
+  }
+}
+:root[data-motion="reduce"] .hero-title {
+  animation: none;
+}
+
 /* Neblina: tres bandas difusas que se disipan con el scroll (intro.ts). */
 .story-hero__mist {
   position: absolute;
@@ -161,7 +197,8 @@
   max-inline-size: 40rem;
   padding: 1.5rem 1.75rem;
   border-radius: 0.5rem;
-  background: rgb(14 20 18 / 0.82);
+  /* Casi opaca: el ocre del número de capítulo necesita fondo oscuro para el contraste AA. */
+  background: rgb(14 20 18 / 0.94);
   color: var(--color-neblina-50);
   text-align: center;
   backdrop-filter: blur(6px);
@@ -184,17 +221,32 @@
   background: rgb(244 245 242 / 0.94);
   color: var(--color-bosque-900);
   box-shadow: 0 10px 30px rgb(14 20 18 / 0.18);
-  opacity: 0.45;
-  transition: opacity 400ms var(--ease-out-power3);
+  /* El paso activo se marca con un borde ocre; el texto nunca se atenúa (contraste AA, §11). */
+  border-inline-start: 4px solid transparent;
+  transition: border-color 400ms var(--ease-out-power3);
 }
 .story .step.is-active .step__body {
-  opacity: 1;
+  border-inline-start-color: var(--color-ocre-500);
 }
 @supports (backdrop-filter: blur(8px)) {
   .story .step__body {
-    background: rgb(244 245 242 / 0.86);
+    background: rgb(244 245 242 / 0.92);
     backdrop-filter: blur(8px);
   }
+}
+
+/* Resto de la portada: aparece con un leve retraso, solo con CSS. */
+.story-hero [data-intro-fade] {
+  animation: intro-fade 0.9s var(--ease-out-power3) 0.5s both;
+}
+@keyframes intro-fade {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+}
+:root[data-motion="reduce"] .story-hero [data-intro-fade] {
+  animation: none;
 }
 
 /* Escritorio y pantallas medianas no verticales: columna izquierda (~38%, máx. 520px).
@@ -250,9 +302,4 @@
     max-block-size: 85svh;
     overflow-y: auto;
   }
-}
-
-/* Modo lite: sin mapa vivo, el fondo queda fijo y el texto se lee igual */
-:root[data-map-mode="lite"] .story .step__body {
-  opacity: 1;
 }

@@ -93,7 +93,9 @@ async function start(data: StoryData, mapEl: HTMLElement) {
 
   if (lite) return;
 
-  // Carga diferida del mapa: cuando el navegador esté libre o al primer scroll.
+  // Carga diferida del mapa (§10.2). En escritorio, cuando el navegador queda libre; en móvil,
+  // solo cuando el usuario empieza a recorrer la historia: arrancar MapLibre cuesta varios
+  // segundos de CPU en un teléfono y bloquearía la portada.
   await new Promise<void>((resolve) => {
     let done = false;
     const go = () => {
@@ -101,9 +103,14 @@ async function start(data: StoryData, mapEl: HTMLElement) {
       done = true;
       resolve();
     };
-    if ('requestIdleCallback' in window) requestIdleCallback(go, { timeout: 1500 });
-    else setTimeout(go, 600);
-    window.addEventListener('scroll', go, { once: true, passive: true });
+    if (window.scrollY > 0) go();
+    for (const ev of ['scroll', 'touchstart', 'keydown', 'wheel'] as const) {
+      window.addEventListener(ev, go, { once: true, passive: true });
+    }
+    if (!isMobile()) {
+      if ('requestIdleCallback' in window) requestIdleCallback(go, { timeout: 1500 });
+      else setTimeout(go, 600);
+    }
   });
 
   const { MapController } = await import('../map/MapController');

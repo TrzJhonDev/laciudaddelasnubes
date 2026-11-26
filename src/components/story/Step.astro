@@ -23,7 +23,7 @@ const { id, align = 'start' } = Astro.props;
     margin-block: 2rem;
   }
   .step__body {
-    max-inline-size: 60ch;
+    max-inline-size: 38rem; /* en rem, no ch: no cambia al cargar la fuente (CLS) */
   }
   .step__body :global(p + p) {
     margin-block-start: 1em;
