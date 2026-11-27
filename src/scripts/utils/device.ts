@@ -77,17 +77,20 @@ type NavigatorExtras = Navigator & {
   connection?: { saveData?: boolean };
 };
 
+/** Ahorro de datos o poca memoria: se propone el modo `lite`, pero el usuario puede salir. */
+export function isConstrained(nav: NavigatorExtras = navigator): boolean {
+  return nav.connection?.saveData === true || (nav.deviceMemory ?? 8) <= 2;
+}
+
 /** Modo `lite` (§6.3): sin WebGL2, poca memoria o ahorro de datos. */
 export function shouldUseLite(
   nav: NavigatorExtras = navigator,
   hasWebGL2: () => boolean = detectWebGL2,
 ): boolean {
-  if (nav.connection?.saveData === true) return true;
-  if ((nav.deviceMemory ?? 8) <= 2) return true;
-  return !hasWebGL2();
+  return isConstrained(nav) || !hasWebGL2();
 }
 
-function detectWebGL2(): boolean {
+export function detectWebGL2(): boolean {
   try {
     return document.createElement('canvas').getContext('webgl2') !== null;
   } catch {

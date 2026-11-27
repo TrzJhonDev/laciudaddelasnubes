@@ -1,8 +1,11 @@
 ---
 import { getCollection, render } from 'astro:content';
+import { readFileSync } from 'node:fs';
+import { join } from 'node:path';
 import Chapter from '@/components/story/Chapter.astro';
 import StickyMap from '@/components/story/StickyMap.astro';
 import FrisoRombos from '@/components/svg/FrisoRombos.astro';
+import MapModeToggle from '@/components/ui/MapModeToggle.astro';
 import ProgressBar from '@/components/ui/ProgressBar.astro';
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import { buildStoryData } from '@/scripts/story/data';
@@ -13,6 +16,28 @@ const rendered = await Promise.all(chapters.map(async (c) => ({ c, ...(await ren
 const storyData = buildStoryData(
   chapters.map((c) => ({ slug: c.data.slug, camera: c.data.camera, steps: c.data.steps })),
 );
+
+// Capturas del modo lite, generadas con `pnpm lite` (scripts/gen-lite.mjs).
+interface LiteManifest {
+  satelite: boolean;
+  claves: string[];
+}
+let lite: LiteManifest = { satelite: false, claves: [] };
+try {
+  lite = JSON.parse(readFileSync(join(process.cwd(), 'public/lite/capturas.json'), 'utf8'));
+} catch {
+  // Aún no se han generado: el modo lite muestra solo el fondo del panel.
+}
+const generated = new Set(lite.claves);
+const needed = new Set(storyData.steps.map((s) => s.liteKey));
+storyData.liteReady = [...needed].filter((k) => generated.has(k));
+const missing = needed.size - storyData.liteReady.length;
+if (missing > 0) {
+  console.warn(`[lite] faltan ${missing} de ${needed.size} capturas: ejecuta \`pnpm lite\``);
+}
+const liteAttribution = `Mapa: © OpenStreetMap · Protomaps · © Mapterhorn${
+  lite.satelite ? ' · EOxCloudless (Copernicus Sentinel-2)' : ''
+}`;
 ---
 
 <BaseLayout
@@ -20,8 +45,9 @@ const storyData = buildStoryData(
   description="Un recorrido interactivo por más de mil años de historia de Chachapoyas y su territorio: Kuélap, Karajía, Revash, la colonia y la independencia."
 >
   <ProgressBar />
+  <MapModeToggle />
   <div class="story">
-    <StickyMap />
+    <StickyMap liteAttribution={liteAttribution} />
 
     <div class="story__content">
       <header class="story-hero" aria-labelledby="titulo">

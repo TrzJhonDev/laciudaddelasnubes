@@ -1,0 +1,52 @@
+---
+/**
+ * Botón "Modo ligero" (§6.3): cambia entre el mapa 3D y las capturas estáticas. Empieza
+ * oculto; el script de la historia lo muestra si el navegador puede dibujar el mapa (sin
+ * WebGL2 el modo lite es obligatorio y el botón no tendría efecto).
+ */
+---
+
+<button type="button" class="map-toggle" data-map-toggle aria-pressed="false" hidden>
+  <svg viewBox="0 0 16 16" width="16" height="16" aria-hidden="true">
+    <path
+      d="M2 4.5 6 3l4 1.5L14 3v8.5L10 13l-4-1.5L2 13z M6 3v8.5 M10 4.5V13"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="1.3"
+      stroke-linejoin="round"></path>
+  </svg>
+  Modo ligero
+</button>
+
+<style>
+  .map-toggle {
+    position: fixed;
+    top: max(0.75rem, env(safe-area-inset-top));
+    right: max(0.75rem, env(safe-area-inset-right));
+    z-index: 40;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    min-height: var(--spacing-touch);
+    padding-inline: 0.875rem;
+    border: 1px solid rgb(244 245 242 / 0.35);
+    border-radius: 999px;
+    font-size: 0.875rem;
+    color: var(--color-neblina-50);
+    background: rgb(14 20 18 / 0.72);
+    backdrop-filter: blur(6px);
+    cursor: pointer;
+    transition: background-color var(--duration-micro) ease;
+  }
+  .map-toggle:hover {
+    background: rgb(14 20 18 / 0.9);
+  }
+  .map-toggle[aria-pressed="true"] {
+    color: var(--color-noche-950);
+    background: var(--color-neblina-50);
+    border-color: var(--color-neblina-50);
+  }
+  .map-toggle[hidden] {
+    display: none;
+  }
+</style>

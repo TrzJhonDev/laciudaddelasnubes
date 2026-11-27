@@ -2,10 +2,24 @@
 /**
  * Contenedor fijo del mapa. El canvas es decorativo (aria-hidden): cada paso describe en
  * texto lo que muestra el mapa, y la versión /texto ofrece todo el contenido (§11).
+ *
+ * En modo lite (§6.3) el mapa vivo no se carga: se muestran capturas estáticas por paso.
  */
+interface Props {
+  /** Atribución de los datos que aparecen en las capturas lite. */
+  liteAttribution: string;
+}
+
+const { liteAttribution } = Astro.props;
 ---
 
 <div class="story__map" aria-hidden="true">
   <div id="story-map" class="absolute inset-0"></div>
+  <div class="story__lite" data-lite>
+    <div class="story__lite-frame" data-lite-frame></div>
+    <div class="story__lite-frame" data-lite-frame></div>
+    <div hidden data-lite-prefetch></div>
+    <p class="story__lite-attrib">{liteAttribution}</p>
+  </div>
   <p class="story__map-status">Cargando el mapa…</p>
 </div>

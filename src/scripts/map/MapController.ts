@@ -1,5 +1,8 @@
 import { addProtocol, Map as MapLibreMap, type PaddingOptions, setWorkerUrl } from 'maplibre-gl';
-import 'maplibre-gl/dist/maplibre-gl.css';
+// Con `?url` el CSS no se cuela en el <head> de la página: Astro enlaza como hoja de estilos
+// bloqueante todo el CSS de los módulos importados, aunque sea con import() dinámico, y en
+// modo lite (o antes de cargar el mapa) son 70 KB que no hacen falta.
+import maplibreCssUrl from 'maplibre-gl/dist/maplibre-gl.css?url';
 import { Protocol } from 'pmtiles';
 import type { DeviceProfile } from '../utils/device';
 import {
@@ -20,6 +23,31 @@ const workerUrl = '/vendor/maplibre-gl-worker.mjs';
 let protocolRegistered = false;
 
 /**
+ * Con relieve, MapLibre dibuja las líneas y rellenos en texturas por tile y solo las rehace si
+ * cambian los tiles, el zoom o el conjunto de capas visibles, no la opacidad. Con la cámara
+ * quieta, un fundido de capa se quedaría congelado en su primer fotograma (pasaba al cargar el
+ * mapa a mitad de un paso). Alternar la visibilidad de esta capa vacía fuerza a rehacerlas.
+ */
+const RTT_REFRESH_LAYER = 'rtt-refresh';
+/** Duración de los fundidos de las capas narrativas (layers.ts) más un margen. */
+const LAYER_FADE_MS = 800;
+
+let cssReady: Promise<void> | null = null;
+
+/** Enlaza el CSS de MapLibre una sola vez y espera a que cargue (si falla, sigue sin él). */
+function loadMaplibreCss(): Promise<void> {
+  cssReady ??= new Promise<void>((resolve) => {
+    const link = document.createElement('link');
+    link.rel = 'stylesheet';
+    link.href = maplibreCssUrl;
+    link.onload = () => resolve();
+    link.onerror = () => resolve();
+    document.head.append(link);
+  });
+  return cssReady;
+}
+
+/**
  * API pública del mapa (contrato §6.5, con setCameraPadding y setProfile añadidos, H5).
  * Toda la historia habla con el mapa a través de esta clase.
  */
@@ -30,6 +58,8 @@ export class MapController {
   private visible = new Set<string>();
   private routes = new Map<string, LngLat[]>();
   private current: CameraState | null = null;
+  private refreshUntil = 0;
+  private refreshing = false;
 
   constructor(opts: { profile: DeviceProfile; reducedMotion: boolean }) {
     this.profile = opts.profile;
@@ -37,6 +67,7 @@ export class MapController {
   }
 
   async init(container: HTMLElement, initial: CameraState): Promise<void> {
+    await loadMaplibreCss();
     if (!protocolRegistered) {
       setWorkerUrl(workerUrl);
       const protocol = new Protocol();
@@ -68,6 +99,15 @@ export class MapController {
         if (!map.loaded()) reject(e.error);
       });
     });
+    map.addLayer(
+      {
+        id: RTT_REFRESH_LAYER,
+        type: 'background',
+        layout: { visibility: 'none' },
+        paint: { 'background-opacity': 0 },
+      },
+      map.getStyle().layers[0]?.id,
+    );
     // La atribución empieza plegada en el botón ⓘ (en móvil, desplegada tapaba media pantalla).
     container
       .querySelector('.maplibregl-ctrl-attrib.maplibregl-compact-show')
@@ -160,6 +200,30 @@ export class MapController {
       const v = value * (narrativeLayerOpacity[layer] ?? 1);
       for (const p of props) map.setPaintProperty(layer, p as 'line-opacity', v);
     }
+    this.refreshDraped(LAYER_FADE_MS);
+  }
+
+  /** Rehace las texturas del relieve en cada fotograma durante `ms` (ver RTT_REFRESH_LAYER). */
+  private refreshDraped(ms: number): void {
+    this.refreshUntil = Math.max(this.refreshUntil, performance.now() + ms);
+    if (this.refreshing) return;
+    this.refreshing = true;
+    let on = false;
+    const tick = () => {
+      const map = this.map;
+      if (!map?.getLayer(RTT_REFRESH_LAYER)) {
+        this.refreshing = false;
+        return;
+      }
+      const more = performance.now() < this.refreshUntil;
+      // Cada fotograma cambia el estado (cualquiera vale: la capa no pinta nada). El último
+      // llega con el fundido ya terminado y deja dibujada la opacidad final.
+      on = !on;
+      map.setLayoutProperty(RTT_REFRESH_LAYER, 'visibility', on ? 'visible' : 'none');
+      if (more) requestAnimationFrame(tick);
+      else this.refreshing = false;
+    };
+    requestAnimationFrame(tick);
   }
 
   setInteractive(enabled: boolean): void {

@@ -57,8 +57,6 @@ const chapters = defineCollection({
       camera,
       steps: z.array(step).min(1),
       sources: z.array(reference('sources')).min(1),
-      /** Captura estática para el modo lite (se genera en F3.6). */
-      liteImage: z.string().regex(/^\/lite\/.+\.(avif|webp|jpg)$/),
       /** Borrador hasta que lo valide el especialista (F1.6). */
       draft: z.boolean().default(true),
     })

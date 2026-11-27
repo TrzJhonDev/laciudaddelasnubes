@@ -26,7 +26,7 @@ export function setMotionPreference(
   }
 }
 
-function safeStorage(): Storage | null {
+export function safeStorage(): Storage | null {
   try {
     return window.localStorage;
   } catch {
