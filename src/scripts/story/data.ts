@@ -38,7 +38,7 @@ interface ChapterInput {
  * Súbelo cuando cambie el aspecto de las capturas lite (estilo, tamaño, capas): todas las
  * claves cambian y `pnpm lite` las vuelve a generar.
  */
-export const LITE_VERSION = 1;
+export const LITE_VERSION = 2;
 
 /** FNV-1a de 32 bits en hexadecimal: da lo mismo en Node y en el navegador. */
 function fnv1a(text: string): string {

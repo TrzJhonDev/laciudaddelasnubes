@@ -5,6 +5,7 @@ import { addProtocol, Map as MapLibreMap, type PaddingOptions, setWorkerUrl } fr
 import maplibreCssUrl from 'maplibre-gl/dist/maplibre-gl.css?url';
 import { Protocol } from 'pmtiles';
 import type { DeviceProfile } from '../utils/device';
+import { type BasemapMode, type BasemapModes, PLANO } from './basemap-modes';
 import {
   type CameraState,
   flightDuration,
@@ -58,6 +59,8 @@ export class MapController {
   private visible = new Set<string>();
   private routes = new Map<string, LngLat[]>();
   private current: CameraState | null = null;
+  private modes: BasemapModes | null = null;
+  private basemapMode: BasemapMode = 'paisaje';
   private refreshUntil = 0;
   private refreshing = false;
 
@@ -74,9 +77,11 @@ export class MapController {
       addProtocol('pmtiles', protocol.tile);
       protocolRegistered = true;
     }
+    const { style, modes } = buildStyle({ exaggeration: this.profile.exaggeration });
+    this.modes = modes;
     const map = new MapLibreMap({
       container,
-      style: buildStyle({ exaggeration: this.profile.exaggeration }),
+      style,
       center: initial.center,
       zoom: initial.zoom,
       pitch: initial.pitch,
@@ -183,12 +188,24 @@ export class MapController {
   /** Muestra exactamente estas capas narrativas y oculta el resto (con fundido). */
   setVisibleLayers(ids: readonly string[]): void {
     const next = new Set(ids);
+    this.setBasemapMode(next.has(PLANO) ? 'plano' : 'paisaje');
     for (const id of new Set([...this.visible, ...next])) {
       const on = next.has(id);
       if (on === this.visible.has(id)) continue;
       this.setLayerOpacity(id, on ? 1 : 0);
     }
     this.visible = next;
+  }
+
+  /** Satélite con vías discretas (paisaje) o mapa vectorial de ciudad (plano). */
+  setBasemapMode(mode: BasemapMode): void {
+    const map = this.map;
+    if (!map || !this.modes || mode === this.basemapMode) return;
+    this.basemapMode = mode;
+    for (const { layer, prop, value } of this.modes[mode]) {
+      if (map.getLayer(layer)) map.setPaintProperty(layer, prop as 'line-opacity', value as number);
+    }
+    this.refreshDraped(LAYER_FADE_MS);
   }
 
   setLayerOpacity(id: string, value: number): void {

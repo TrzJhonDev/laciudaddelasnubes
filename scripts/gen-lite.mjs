@@ -104,30 +104,32 @@ async function openStory(browser, frame) {
   await page.addStyleTag({ content: CAPTURE_CSS });
   await page.evaluate((satellite) => {
     const map = window.__story.controller.instance;
-    if (!satellite) {
-      map.setLayoutProperty('satelite', 'visibility', 'none');
-      // Sin satélite, el relieve lo da el sombreado: más marcado que sobre la foto.
-      map.setPaintProperty('hillshade', 'hillshade-exaggeration', 0.55);
-    }
+    if (!satellite) map.setLayoutProperty('satelite', 'visibility', 'none');
   }, withSatellite);
   return { context, page };
 }
 
 /** Coloca la vista de un paso y espera a que el mapa termine de cargar y dibujar. */
 async function capture(page, stepId) {
-  await page.evaluate(async (id) => {
-    const { controller, cameraOf, data } = window.__story;
-    const step = data.steps.find((s) => s.id === id);
-    const map = controller.instance;
-    controller.setVisibleLayers(step.layers);
-    controller.goTo(cameraOf(step), { instant: true });
-    await new Promise((resolve) => {
-      map.once('idle', resolve);
-      map.triggerRepaint();
-    });
-  }, stepId);
-  // Margen para el fundido de los tiles y las etiquetas.
-  await page.waitForTimeout(400);
+  await page.evaluate(
+    async ({ id, satellite }) => {
+      const { controller, cameraOf, data } = window.__story;
+      const step = data.steps.find((s) => s.id === id);
+      const map = controller.instance;
+      controller.setVisibleLayers(step.layers);
+      // Sin la foto, el aspecto `paisaje` (vías tenues, agua oculta) se queda vacío: se usa el
+      // mapa vectorial completo, con el relieve sombreado.
+      if (!satellite) controller.setBasemapMode('plano');
+      controller.goTo(cameraOf(step), { instant: true });
+      await new Promise((resolve) => {
+        map.once('idle', resolve);
+        map.triggerRepaint();
+      });
+    },
+    { id: stepId, satellite: withSatellite },
+  );
+  // Margen para los fundidos de capas y del mapa base (700 ms) y de las etiquetas.
+  await page.waitForTimeout(900);
   await page.evaluate(
     () =>
       new Promise((resolve) => {

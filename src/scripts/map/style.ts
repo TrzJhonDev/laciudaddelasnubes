@@ -1,5 +1,6 @@
 import { LIGHT, layers as protomapsLayers } from '@protomaps/basemaps';
 import type { LayerSpecification, StyleSpecification } from 'maplibre-gl';
+import { applyBasemapModes, type BasemapMode, type BasemapModes } from './basemap-modes';
 import {
   ATTRIBUTION,
   BASEMAPS,
@@ -62,21 +63,41 @@ function basemapLayers(): LayerSpecification[] {
   return out;
 }
 
-export function buildStyle(opts: { exaggeration: number }): StyleSpecification {
+/** Sombreado del relieve en cada modo: sobre la foto solo oscurece; en el plano, más marcado. */
+const HILLSHADE: Record<BasemapMode, Record<string, unknown>> = {
+  paisaje: {
+    'hillshade-exaggeration': 0.35,
+    'hillshade-shadow-color': 'rgba(14, 20, 18, 0.5)',
+    'hillshade-highlight-color': 'rgba(255, 248, 235, 0.15)',
+    'hillshade-accent-color': 'rgba(0, 0, 0, 0)',
+  },
+  plano: {
+    'hillshade-exaggeration': 0.5,
+    'hillshade-shadow-color': '#1a2a21',
+    'hillshade-highlight-color': '#f4f5f2',
+    'hillshade-accent-color': '#2f4a3a',
+  },
+};
+
+export function buildStyle(opts: { exaggeration: number }): {
+  style: StyleSpecification;
+  modes: BasemapModes;
+} {
   const base = basemapLayers();
 
-  // El hillshade va justo encima del suelo y del agua, debajo de vías y etiquetas.
+  // El satélite y el hillshade van justo encima del suelo, debajo de vías y etiquetas.
   const firstRoad = base.findIndex((l) => /^(cont|reg)-roads/.test(l.id) || l.type === 'symbol');
   const insertAt = firstRoad === -1 ? base.length : firstRoad;
-  // Satélite en paisajes; se desvanece hacia el mapa vectorial en la ciudad (zoom ≥ 16.5).
   const satellite: LayerSpecification = {
     id: 'satelite',
     type: 'raster',
     source: 'satelite',
     paint: {
-      'raster-opacity': ['interpolate', ['linear'], ['zoom'], 15.5, 1, 16.5, 0],
-      'raster-saturation': -0.15,
-      'raster-contrast': 0.05,
+      'raster-opacity': 1,
+      'raster-opacity-transition': { duration: 700 },
+      // Sentinel-2 sale algo apagado: un poco más de contraste y color.
+      'raster-saturation': 0.05,
+      'raster-contrast': 0.08,
       'raster-fade-duration': 200,
     },
   };
@@ -84,14 +105,18 @@ export function buildStyle(opts: { exaggeration: number }): StyleSpecification {
     id: 'hillshade',
     type: 'hillshade',
     source: 'hillshade',
-    paint: {
-      // Más suave sobre el satélite (ya trae sombras propias), más marcado en la ciudad.
-      'hillshade-exaggeration': ['interpolate', ['linear'], ['zoom'], 15.5, 0.2, 16.5, 0.5],
-      'hillshade-shadow-color': '#1a2a21',
-      'hillshade-highlight-color': '#f4f5f2',
-      'hillshade-accent-color': '#2f4a3a',
-    },
-  };
+    paint: { ...HILLSHADE.paisaje } as LayerSpecification['paint'],
+  } as LayerSpecification;
+
+  const own: BasemapModes = { paisaje: [], plano: [] };
+  for (const mode of ['paisaje', 'plano'] as const) {
+    own[mode].push({ layer: 'satelite', prop: 'raster-opacity', value: mode === 'plano' ? 0 : 1 });
+    for (const [prop, value] of Object.entries(HILLSHADE[mode])) {
+      own[mode].push({ layer: 'hillshade', prop, value });
+    }
+  }
+  // Las capas desde `insertAt` se dibujan encima del satélite.
+  const modes = applyBasemapModes(base, insertAt - 1, own);
 
   const terrainSource = {
     type: 'raster-dem' as const,
@@ -102,7 +127,7 @@ export function buildStyle(opts: { exaggeration: number }): StyleSpecification {
     attribution: ATTRIBUTION.terrain,
   };
 
-  return {
+  const style: StyleSpecification = {
     version: 8,
     glyphs: GLYPHS_URL,
     sprite: SPRITE_URL,
@@ -150,4 +175,5 @@ export function buildStyle(opts: { exaggeration: number }): StyleSpecification {
       ...narrativeLayers,
     ],
   };
+  return { style, modes };
 }
